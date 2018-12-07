@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_orders"
+        android:enabled="true"
+        android:title="@string/orders_bottom_menu"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_history"
+        android:enabled="true"
+        android:title="@string/history_bottom_menu"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_stats"
+        android:enabled="true"
+        android:title="@string/stats_bottom_menu"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_exit"
+        android:enabled="true"
+        android:title="@string/exit_bottom_menu"
+        app:showAsAction="ifRoom" />
+</menu>
