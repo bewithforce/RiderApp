@@ -12,7 +12,7 @@
         android:layout_height="0dp"
         android:layout_marginStart="148dp"
         android:layout_marginTop="104dp"
-        android:text="AppName"
+        android:text="@string/app_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,7 +28,7 @@
         <android.support.design.widget.TextInputEditText
             android:layout_width="383dp"
             android:layout_height="wrap_content"
-            android:hint="логин" />
+            android:hint="@string/login" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -43,7 +43,7 @@
         <android.support.design.widget.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="пароль" />
+            android:hint="@string/password" />
     </android.support.design.widget.TextInputLayout>
 
     <TextView
@@ -52,9 +52,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="119dp"
         android:layout_marginTop="56dp"
-        android:text="Не получилось войти?"
+        android:text="@string/sign_in_troubles"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLogin" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonLogin"
+        />
 
     <Button
         android:id="@+id/buttonLogin"
@@ -62,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="148dp"
         android:layout_marginTop="16dp"
-        android:text="войти"
+        android:text="@string/action_sign_in"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
 
@@ -71,8 +72,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="119dp"
-        android:layout_marginTop="28dp"
-        android:text="стать курьером"
+        android:layout_marginTop="8dp"
+        android:text="@string/action_register"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewFail" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonLogin"
+        android:background="@drawable/button_register"/>
 </android.support.constraint.ConstraintLayout>

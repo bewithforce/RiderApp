@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">RiderApp</string>
     <!-- Strings related to login -->
-    <string name="prompt_email">Логин</string>
-    <string name="prompt_password">Пароль</string>
+    <string name="login">Логин</string>
+    <string name="password">Пароль</string>
     <string name="action_sign_in">Войти</string>
-    <string name="action_register">Стать курьером</string>
+    <string name="action_register"><u>Стать курьером</u></string>
+    <string name="sign_in_troubles">Не удалось войти?</string>
 
     <string name="orders_bottom_menu">Заказы</string>
     <string name="history_bottom_menu">История</string>
