@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         textViewFail.setOnClickListener((e) -> {
-            Intent browserIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "80291111111"));
+            Intent browserIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "80291111111"));
             startActivity(browserIntent);
         });
     }

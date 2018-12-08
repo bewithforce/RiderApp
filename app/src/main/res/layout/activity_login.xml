@@ -10,9 +10,12 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="148dp"
-        android:layout_marginTop="104dp"
+        android:layout_marginStart="138dp"
+        android:layout_marginTop="160dp"
         android:text="@string/app_name"
+        android:textColor="#232F34"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,7 +27,6 @@
         android:layout_marginTop="236dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
         <android.support.design.widget.TextInputEditText
             android:layout_width="383dp"
             android:layout_height="wrap_content"
@@ -39,42 +41,41 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
-
         <android.support.design.widget.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/password" />
     </android.support.design.widget.TextInputLayout>
 
-    <TextView
-        android:id="@+id/textViewFail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="119dp"
-        android:layout_marginTop="56dp"
-        android:text="@string/sign_in_troubles"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLogin"
-        />
-
     <Button
         android:id="@+id/buttonLogin"
-        android:layout_width="wrap_content"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="148dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button_login"
         android:text="@string/action_sign_in"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
 
     <Button
         android:id="@+id/buttonRegister"
-        android:layout_width="wrap_content"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="119dp"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="8dp"
         android:text="@string/action_register"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonLogin"
         android:background="@drawable/button_register"/>
+
+    <TextView
+        android:id="@+id/textViewFail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="129dp"
+        android:layout_marginTop="72dp"
+        android:text="@string/sign_in_troubles"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonRegister" />
 </android.support.constraint.ConstraintLayout>
