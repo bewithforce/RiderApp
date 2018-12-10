@@ -24,6 +24,20 @@
         </activity>
         <activity android:name=".gui.LogInActivity.LoginActivity" />
         <activity android:name=".gui.OrdersActivity" />
+
+        <service
+            android:name=".GeoService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <receiver
+            android:name=".GeoReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.github.bewithforce.riderapp" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

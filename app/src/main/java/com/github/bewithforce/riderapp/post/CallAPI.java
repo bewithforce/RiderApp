@@ -7,18 +7,19 @@ import com.github.bewithforce.riderapp.post.requests.OrdersPOST;
 import com.github.bewithforce.riderapp.post.requests.StatPOST;
 
 import io.reactivex.Observable;
+import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
-interface CallAPI {
+public interface CallAPI {
 
     @POST("update_location")
     Observable<Void> locationReport(@Body CourierLocationPOST locationPOST);
 
     @POST("auth")
-    Observable<Void> login(@Body LoginPOST loginPOST);
+    Call<Void> login(@Body LoginPOST loginPOST);
 
     @GET("orders//get")
     Observable<OrdersPOST> getOrders();
