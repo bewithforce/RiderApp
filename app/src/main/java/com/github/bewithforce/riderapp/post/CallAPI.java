@@ -1,6 +1,7 @@
 package com.github.bewithforce.riderapp.post;
 
 import com.github.bewithforce.riderapp.post.requests.CourierLocationPOST;
+import com.github.bewithforce.riderapp.post.requests.JsonWebToken;
 import com.github.bewithforce.riderapp.post.requests.LoginPOST;
 import com.github.bewithforce.riderapp.post.requests.OrderWithDishesPOST;
 import com.github.bewithforce.riderapp.post.requests.OrdersPOST;
@@ -19,7 +20,7 @@ public interface CallAPI {
     Observable<Void> locationReport(@Body CourierLocationPOST locationPOST);
 
     @POST("auth")
-    Call<Void> login(@Body LoginPOST loginPOST);
+    Call<JsonWebToken> login(@Body LoginPOST loginPOST);
 
     @GET("orders//get")
     Observable<OrdersPOST> getOrders();

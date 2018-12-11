@@ -4,26 +4,27 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.bewithforce.riderapp.R;
 import com.github.bewithforce.riderapp.gui.OrdersActivity;
+import com.github.bewithforce.riderapp.post.APIClient;
 import com.github.bewithforce.riderapp.post.CallAPI;
-import com.github.bewithforce.riderapp.post.ServiceGenerator;
+import com.github.bewithforce.riderapp.post.requests.JsonWebToken;
 import com.github.bewithforce.riderapp.post.requests.LoginPOST;
 
-
-import java.io.IOException;
-
-import butterknife.BindView;
-import io.reactivex.Observable;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-import static com.github.bewithforce.riderapp.post.ServiceGenerator.createService;
 
 public class LoginActivity extends AppCompatActivity {
+
+    CallAPI callAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,18 +50,30 @@ public class LoginActivity extends AppCompatActivity {
             loginPOST.setPassword(password_value);
             loginPOST.setLogin(login_value);
 
-            CallAPI userService = ServiceGenerator.createService(CallAPI.class);
-            Call<Void> call = userService.login(loginPOST);
-            try {
-                Void void_value = call.execute().body();
-            }
-            catch (Exception exception){
+            callAPI = APIClient.getClient().create(CallAPI.class);
 
-            }
+            Call<JsonWebToken> call = callAPI.login(loginPOST);
+            call.enqueue(new Callback<JsonWebToken>() {
+                @Override
+                public void onResponse(Call<JsonWebToken> call, Response<JsonWebToken> response) {
+                    JsonWebToken token = response.body();
+                    if(token != null){
+                        Log.d("token", token.getToken());
+                    }
+                    else{
+                        Log.d("token", "nothing shit");
+                    }
+                    Intent intent = new Intent(LoginActivity.this, OrdersActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
 
-            Intent browserIntent = new Intent(this, OrdersActivity.class);
-            startActivity(browserIntent);
-            finish();
+                @Override
+                public void onFailure(Call<JsonWebToken> call, Throwable t) {
+                    call.cancel();
+                }
+            });
+
         });
         buttonRegister.setOnClickListener((e) -> {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
