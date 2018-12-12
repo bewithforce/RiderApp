@@ -7,27 +7,20 @@ import android.widget.TextView;
 
 import com.github.bewithforce.riderapp.R;
 
-public class OrdersActivity extends AppCompatActivity {
-
-    private TextView textView;
+public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_orders);
-        textView = findViewById(R.id.textView3);
-        textView.setText("Заказы");
+        setContentView(R.layout.base_activity);
         BottomNavigationView view = findViewById(R.id.navigation);
         view.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.action_orders:
-                    textView.setText("Заказы");
                     return true;
                 case R.id.action_history:
-                    textView.setText("История");
                     return true;
                 case R.id.action_stats:
-                    textView.setText("Статистика");
                     return true;
                 case R.id.action_exit:
                     finish();

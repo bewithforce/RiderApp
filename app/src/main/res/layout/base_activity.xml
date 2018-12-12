@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".gui.OrdersActivity">
+    tools:context=".gui.BaseActivity">
 
 
 
@@ -20,13 +20,21 @@
         app:layout_constraintRight_toRightOf="parent"
         app:menu="@menu/bottom_navigation_orders_and_others" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="140dp"
-        android:layout_marginTop="212dp"
-        android:textSize="34sp"
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="510dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+        <fragment class="com.github.bewithforce.riderapp.gui.fragments.OrdersFragment"
+            android:id="@+id/titles"
+            android:layout_width="match_parent" android:layout_height="match_parent" />
+
+    </FrameLayout>
+
+
 </android.support.constraint.ConstraintLayout>

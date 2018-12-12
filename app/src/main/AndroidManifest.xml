@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".gui.LogInActivity.LoginActivity" />
-        <activity android:name=".gui.OrdersActivity" />
+        <activity android:name=".gui.BaseActivity" />
 
         <service
             android:name=".GeoService"
@@ -38,6 +38,7 @@
                 <action android:name="com.github.bewithforce.riderapp" />
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

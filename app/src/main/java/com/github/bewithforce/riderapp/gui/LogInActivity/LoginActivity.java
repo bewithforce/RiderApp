@@ -8,10 +8,9 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.bewithforce.riderapp.R;
-import com.github.bewithforce.riderapp.gui.OrdersActivity;
+import com.github.bewithforce.riderapp.gui.BaseActivity;
 import com.github.bewithforce.riderapp.post.APIClient;
 import com.github.bewithforce.riderapp.post.CallAPI;
 import com.github.bewithforce.riderapp.post.requests.JsonWebToken;
@@ -63,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                     else{
                         Log.d("token", "nothing shit");
                     }
-                    Intent intent = new Intent(LoginActivity.this, OrdersActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, BaseActivity.class);
                     startActivity(intent);
                     finish();
                 }
