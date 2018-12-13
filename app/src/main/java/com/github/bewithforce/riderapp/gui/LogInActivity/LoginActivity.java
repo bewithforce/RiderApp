@@ -46,8 +46,8 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             LoginPOST loginPOST = new LoginPOST();
-            loginPOST.setPassword(password_value);
-            loginPOST.setLogin(login_value);
+            loginPOST.setPass(password_value);
+            loginPOST.setName(login_value);
 
             callAPI = APIClient.getClient().create(CallAPI.class);
 
@@ -60,11 +60,18 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("token", token.getToken());
                     }
                     else{
-                        Log.d("token", "nothing shit");
+                        try {
+                            Log.d("token", response.errorBody().string());
+                        }
+                        catch (Exception e1){
+                            Log.e("token", e1.getLocalizedMessage());
+                        }
                     }
-                    Intent intent = new Intent(LoginActivity.this, BaseActivity.class);
-                    startActivity(intent);
-                    finish();
+                    if(response.code() == 200) {
+                        Intent intent = new Intent(LoginActivity.this, BaseActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
                 }
 
                 @Override
