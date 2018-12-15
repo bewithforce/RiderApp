@@ -17,28 +17,28 @@ import retrofit2.http.Path;
 public interface CallAPI {
 
     @POST("update_location")
-    Observable<Void> locationReport(@Body CourierLocationPOST locationPOST);
+    Observable<Void> locationReport(@Body CourierLocationPOST locationPOST, @Body JsonWebToken token);
 
     @POST("auth")
     Call<JsonWebToken> login(@Body LoginPOST loginPOST);
 
     @GET("orders//get")
-    Observable<OrdersPOST> getOrders();
+    Observable<OrdersPOST> getOrders(@Body JsonWebToken token);
 
     @GET("order//{id}")
-    Observable<OrderWithDishesPOST> getDetailedOrder(@Path("id") int orderId);
+    Observable<OrderWithDishesPOST> getDetailedOrder(@Path("id") int orderId, @Body JsonWebToken token);
 
     @GET("statistics")
-    Observable<StatPOST> getStatiscs();
+    Observable<StatPOST> getStatiscs(@Body JsonWebToken token);
 
     //не описано
     @GET()
-    Observable<OrdersPOST> getOrdersHistory();
+    Observable<OrdersPOST> getOrdersHistory(@Body JsonWebToken token);
 
     @POST("arrivedtorestaurant")
-    Observable<Void> arrivedToRestaurant();
+    Observable<Void> arrivedToRestaurant(@Body JsonWebToken token);
 
     @POST("arrivedtocustomer")
-    Observable<Void> arrivedToCustomer();
+    Observable<Void> arrivedToCustomer(@Body JsonWebToken token);
 
 }

@@ -1,6 +1,7 @@
 package com.github.bewithforce.riderapp.gui.LogInActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -58,6 +59,9 @@ public class LoginActivity extends AppCompatActivity {
                     JsonWebToken token = response.body();
                     if(token != null){
                         Log.d("token", token.getToken());
+                        SharedPreferences.Editor editor = getSharedPreferences("session_token", MODE_PRIVATE).edit();
+                        editor.putString("token", token.getToken());
+                        editor.apply();
                     }
                     else{
                         try {
