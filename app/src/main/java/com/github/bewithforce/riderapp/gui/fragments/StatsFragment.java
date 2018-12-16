@@ -5,20 +5,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.github.bewithforce.riderapp.R;
-import com.github.bewithforce.riderapp.gui.BaseActivity;
 import com.github.bewithforce.riderapp.gui.LogInActivity.LoginActivity;
 import com.github.bewithforce.riderapp.post.APIClient;
 import com.github.bewithforce.riderapp.post.CallAPI;
-import com.github.bewithforce.riderapp.post.requestBeans.JsonWebToken;
 import com.github.bewithforce.riderapp.post.requestBeans.Stat;
 
 import retrofit2.Call;
@@ -38,11 +34,9 @@ public class StatsFragment extends Fragment {
         TextView cash = getView().findViewById(R.id.cash_received);
         TextView orders_completed = getView().findViewById(R.id.orders_completed);
         CallAPI callAPI = APIClient.getClient().create(CallAPI.class);
-        JsonWebToken token = new JsonWebToken();
 
         SharedPreferences prefs = this.getActivity().getSharedPreferences("session_token", Context.MODE_PRIVATE);
-        String token_string = prefs.getString("token", null);
-        token.setToken(token_string);
+        String token = prefs.getString("token", null);
         Call<Stat> call = callAPI.getStatiscs(token);
         call.enqueue(new Callback<Stat>() {
             @Override

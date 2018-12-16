@@ -1,11 +1,8 @@
 package com.github.bewithforce.riderapp.gui.LogInActivity;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -58,11 +55,12 @@ public class LoginActivity extends AppCompatActivity {
             call.enqueue(new Callback<JsonWebToken>() {
                 @Override
                 public void onResponse(Call<JsonWebToken> call, Response<JsonWebToken> response) {
-                    JsonWebToken token = response.body();
-                    if(token != null){
-                        Log.d("token", token.getToken());
+                    JsonWebToken jsonWebToken = response.body();
+                    if(jsonWebToken != null){
+                        String token = jsonWebToken.getToken();
+                        Log.d("token_received", token);
                         SharedPreferences.Editor editor = getSharedPreferences("session_token", MODE_PRIVATE).edit();
-                        editor.putString("token", token.getToken());
+                        editor.putString("token", token);
                         editor.apply();
                     }
                     else{

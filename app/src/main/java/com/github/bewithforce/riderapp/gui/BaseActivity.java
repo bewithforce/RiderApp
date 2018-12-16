@@ -1,7 +1,6 @@
 package com.github.bewithforce.riderapp.gui;
 
 import android.Manifest;
-import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -22,22 +21,27 @@ import com.github.bewithforce.riderapp.gui.fragments.StatsFragment;
 
 public class BaseActivity extends AppCompatActivity {
 
-    private GeoReceiver receiver = new GeoReceiver();
-    private Intent geoIntent = new Intent(this, GeoService.class);
+    private GeoReceiver receiver;
+    private Intent geoIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_activity);
         BottomNavigationView view = findViewById(R.id.navigation);
-
+        geoIntent = new Intent(this, GeoService.class);
+        receiver = new GeoReceiver();
         if(!checkIfAlreadyHavePermission()){
-            Log.e("veeeeeeeee", "already have");
+            Log.e("veeeeeeeee", "we will receive");
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 7);
         }
-            IntentFilter filter = new IntentFilter("com.github.bewithforce.riderapp");
+        else{
+            Log.e("veeeeeeeee", "already have");
+            IntentFilter filter = new IntentFilter();
+            filter.addAction("com.github.bewithforce.riderapp");
             registerReceiver(receiver, filter);
             startService(geoIntent);
+        }
 
         view.setOnNavigationItemSelectedListener(item -> {
        //     FrameLayout layout = findViewById(R.id.base_fragment);
@@ -84,13 +88,12 @@ public class BaseActivity extends AppCompatActivity {
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     finish();
                 }
-                else {
-                    IntentFilter filter = new IntentFilter("com.github.bewithforce.riderapp");
-                    registerReceiver(receiver, filter);
-                    startService(geoIntent);
-                }
                 break;
             default:
+                IntentFilter filter = new IntentFilter();
+                filter.addAction("com.github.bewithforce.riderapp");
+                registerReceiver(receiver, filter);
+                startService(geoIntent);
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
