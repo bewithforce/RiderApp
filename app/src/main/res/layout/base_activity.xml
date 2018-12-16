@@ -31,7 +31,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"> -->
     <fragment
-        android:id="@+id/titles"
+        android:id="@+id/base_fragment"
         class="com.github.bewithforce.riderapp.gui.fragments.OrdersFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

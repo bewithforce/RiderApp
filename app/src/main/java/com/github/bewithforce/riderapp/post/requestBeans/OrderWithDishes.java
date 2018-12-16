@@ -1,4 +1,4 @@
-package com.github.bewithforce.riderapp.post.requests;
+package com.github.bewithforce.riderapp.post.requestBeans;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import com.github.bewithforce.riderapp.post.requestBeans.RestaurantLocation;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class OrderWithDishesPOST {
+public class OrderWithDishes {
 
     @SerializedName("id")
     @Expose

@@ -2,18 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_orders"
+        android:visible="true"
         android:icon="@drawable/orders_passive"
         android:title="@string/orders_bottom_menu" />
     <item
         android:id="@+id/action_history"
+        android:visible="true"
         android:icon="@drawable/history_passive"
         android:title="@string/history_bottom_menu" />
     <item
         android:id="@+id/action_stats"
+        android:visible="true"
         android:icon="@drawable/stats_passive"
         android:title="@string/stats_bottom_menu" />
     <item
         android:id="@+id/action_exit"
+        android:visible="true"
         android:icon="@drawable/exit"
         android:title="@string/exit_bottom_menu" />
 </menu>

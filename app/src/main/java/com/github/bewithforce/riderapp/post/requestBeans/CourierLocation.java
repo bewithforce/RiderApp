@@ -1,9 +1,9 @@
-package com.github.bewithforce.riderapp.post.requests;
+package com.github.bewithforce.riderapp.post.requestBeans;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class CourierLocationPOST {
+public class CourierLocation {
 
     @SerializedName("latitude")
     @Expose

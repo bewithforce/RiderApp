@@ -1,44 +1,45 @@
 package com.github.bewithforce.riderapp.post;
 
-import com.github.bewithforce.riderapp.post.requests.CourierLocationPOST;
-import com.github.bewithforce.riderapp.post.requests.JsonWebToken;
-import com.github.bewithforce.riderapp.post.requests.LoginPOST;
-import com.github.bewithforce.riderapp.post.requests.OrderWithDishesPOST;
-import com.github.bewithforce.riderapp.post.requests.OrdersPOST;
-import com.github.bewithforce.riderapp.post.requests.StatPOST;
+import com.github.bewithforce.riderapp.post.requestBeans.CourierLocation;
+import com.github.bewithforce.riderapp.post.requestBeans.JsonWebToken;
+import com.github.bewithforce.riderapp.post.requestBeans.Login;
+import com.github.bewithforce.riderapp.post.requestBeans.OrderWithDishes;
+import com.github.bewithforce.riderapp.post.requestBeans.Orders;
+import com.github.bewithforce.riderapp.post.requestBeans.Stat;
 
 import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface CallAPI {
 
     @POST("update_location")
-    Observable<Void> locationReport(@Body CourierLocationPOST locationPOST, @Body JsonWebToken token);
+    Call<Void> locationReport(@Body CourierLocation location, @Header("token") JsonWebToken token);
 
     @POST("auth")
-    Call<JsonWebToken> login(@Body LoginPOST loginPOST);
+    Call<JsonWebToken> login(@Body Login login);
 
     @GET("orders//get")
-    Observable<OrdersPOST> getOrders(@Body JsonWebToken token);
+    Observable<Orders> getOrders(@Header("token") JsonWebToken token);
 
     @GET("order//{id}")
-    Observable<OrderWithDishesPOST> getDetailedOrder(@Path("id") int orderId, @Body JsonWebToken token);
+    Observable<OrderWithDishes> getDetailedOrder(@Path("id") int orderId, @Header("token")JsonWebToken token);
 
     @GET("statistics")
-    Observable<StatPOST> getStatiscs(@Body JsonWebToken token);
+    Call<Stat> getStatiscs(@Header("token") JsonWebToken token);
 
     //не описано
     @GET()
-    Observable<OrdersPOST> getOrdersHistory(@Body JsonWebToken token);
+    Observable<Orders> getOrdersHistory(@Header("token")JsonWebToken token);
 
     @POST("arrivedtorestaurant")
-    Observable<Void> arrivedToRestaurant(@Body JsonWebToken token);
+    Observable<Void> arrivedToRestaurant(@Header("token")JsonWebToken token);
 
     @POST("arrivedtocustomer")
-    Observable<Void> arrivedToCustomer(@Body JsonWebToken token);
+    Observable<Void> arrivedToCustomer(@Header("token")JsonWebToken token);
 
 }

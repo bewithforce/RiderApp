@@ -8,6 +8,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 
 public class GeoService extends Service {
 
@@ -20,12 +21,14 @@ public class GeoService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.e("veeeeeeee", "service was lost");
         mLocationManager.removeUpdates(mLocationListener);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         foundMeOnTheEarth();
+        Log.e("veeeeeeee", "service was starting");
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -41,7 +44,8 @@ public class GeoService extends Service {
             @Override
             public void onLocationChanged(Location location) {
                 Intent mBroadcastIntent = new Intent();
-                mBroadcastIntent.setAction("com.example.denis.attemptnumber11");
+                Log.e("veeeeeeee", "location was changed");
+                mBroadcastIntent.setAction("com.github.bewithforce.riderapp");
                 mBroadcastIntent.putExtra("latitude", location.getLatitude());
                 mBroadcastIntent.putExtra("longitude", location.getLongitude());
                 sendBroadcast(mBroadcastIntent);
@@ -53,7 +57,7 @@ public class GeoService extends Service {
             @Override
             public void onProviderDisabled(String s) {}
         };
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,mLocationListener);
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10,mLocationListener);
     }
 
 }

@@ -11,9 +11,8 @@
     <string name="history_bottom_menu">История</string>
     <string name="stats_bottom_menu">Отчеты</string>
     <string name="exit_bottom_menu">Выход</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="title_activity_stats">StatsActivity</string>
+
+    <string name="stats_title">Отчет курьера</string>
+    <string name="stats_orders_completed">Выполнено заказово за смену:</string>
+    <string name="stats_cash_received">Получено наличных денег:</string>
 </resources>
