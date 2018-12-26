@@ -14,6 +14,7 @@ import com.github.bewithforce.riderapp.R;
 import com.github.bewithforce.riderapp.gui.BaseActivity;
 import com.github.bewithforce.riderapp.post.APIClient;
 import com.github.bewithforce.riderapp.post.CallAPI;
+import com.github.bewithforce.riderapp.post.JWTUtils;
 import com.github.bewithforce.riderapp.post.requestBeans.JsonWebToken;
 import com.github.bewithforce.riderapp.post.requestBeans.Login;
 
@@ -38,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         EditText password_view = findViewById(R.id.password_text);
 
         buttonLogin.setOnClickListener((e) -> {
+            buttonLogin.setClickable(false);
             String password_value = password_view.getText().toString();
             String login_value = login_view.getText().toString();
             if(password_value.length() == 0 ||
@@ -56,8 +58,18 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<JsonWebToken> call, Response<JsonWebToken> response) {
                     JsonWebToken jsonWebToken = response.body();
+                    String token;
                     if(jsonWebToken != null){
-                        String token = jsonWebToken.getToken();
+                        try {
+                            token = JWTUtils.decoded(jsonWebToken.getToken());
+                            if(token == null){
+                                throw new Exception("bad news");
+                            }
+                        }
+                        catch (Exception e){
+                            Log.e("token", e.getLocalizedMessage());
+                            return;
+                        }
                         Log.d("token_received", token);
                         SharedPreferences.Editor editor = getSharedPreferences("session_token", MODE_PRIVATE).edit();
                         editor.putString("token", token);
@@ -90,6 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
 
+            buttonLogin.setClickable(true);
         });
         buttonRegister.setOnClickListener((e) -> {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));

@@ -17,7 +17,7 @@ public class APIClient {
 
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://eatmealby.com/system/courier/")
+                .baseUrl("http://93.125.53.130:3006 /system/courier/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();

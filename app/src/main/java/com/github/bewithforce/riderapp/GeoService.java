@@ -57,7 +57,7 @@ public class GeoService extends Service {
             @Override
             public void onProviderDisabled(String s) {}
         };
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10,mLocationListener);
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,10000,10,mLocationListener);
     }
 
 }
