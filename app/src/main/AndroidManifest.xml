@@ -43,6 +43,7 @@
             </intent-filter>
         </receiver>
 
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>

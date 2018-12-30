@@ -24,22 +24,22 @@ public interface CallAPI {
     Call<JsonWebToken> login(@Body Login login);
 
     @GET("orders//get")
-    Observable<Orders> getOrders(@Header("authorization") String token);
+    Call<Orders> getOrders(@Header("authorization") String token);
 
     @GET("order//{id}")
-    Observable<OrderWithDishes> getDetailedOrder(@Path("id") int orderId, @Header("authorization")String token);
+    Call<OrderWithDishes> getDetailedOrder(@Path("id") int orderId, @Header("authorization")String token);
 
     @GET("statistics")
     Call<Stat> getStatiscs(@Header("token") String token);
 
     //не описано
     @GET()
-    Observable<Orders> getOrdersHistory(@Header("authorization")String token);
+    Call<Orders> getOrdersHistory(@Header("authorization")String token);
 
     @POST("arrivedtorestaurant")
-    Observable<Void> arrivedToRestaurant(@Header("authorization")String token);
+    Call<Void> arrivedToRestaurant(@Header("authorization")String token);
 
     @POST("arrivedtocustomer")
-    Observable<Void> arrivedToCustomer(@Header("authorization")String token);
+    Call<Void> arrivedToCustomer(@Header("authorization")String token);
 
 }

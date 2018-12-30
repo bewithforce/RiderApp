@@ -15,4 +15,6 @@
     <string name="stats_title">Отчет курьера</string>
     <string name="stats_orders_completed">Выполнено заказово за смену:</string>
     <string name="stats_cash_received">Получено наличных денег:</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

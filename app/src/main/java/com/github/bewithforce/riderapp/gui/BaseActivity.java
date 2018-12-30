@@ -44,7 +44,6 @@ public class BaseActivity extends AppCompatActivity {
         }
 
         view.setOnNavigationItemSelectedListener(item -> {
-       //     FrameLayout layout = findViewById(R.id.base_fragment);
             switch (item.getItemId()) {
                 case R.id.action_orders:
                     getSupportFragmentManager()

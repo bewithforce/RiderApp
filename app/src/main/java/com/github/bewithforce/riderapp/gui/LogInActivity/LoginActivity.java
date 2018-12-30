@@ -14,7 +14,6 @@ import com.github.bewithforce.riderapp.R;
 import com.github.bewithforce.riderapp.gui.BaseActivity;
 import com.github.bewithforce.riderapp.post.APIClient;
 import com.github.bewithforce.riderapp.post.CallAPI;
-import com.github.bewithforce.riderapp.post.JWTUtils;
 import com.github.bewithforce.riderapp.post.requestBeans.JsonWebToken;
 import com.github.bewithforce.riderapp.post.requestBeans.Login;
 
@@ -61,10 +60,10 @@ public class LoginActivity extends AppCompatActivity {
                     String token;
                     if(jsonWebToken != null){
                         try {
-                            token = JWTUtils.decoded(jsonWebToken.getToken());
-                            if(token == null){
+                            if(jsonWebToken.getToken() == null){
                                 throw new Exception("bad news");
                             }
+                            token = "Bearer " + jsonWebToken.getToken();
                         }
                         catch (Exception e){
                             Log.e("token", e.getLocalizedMessage());
