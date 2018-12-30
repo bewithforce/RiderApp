@@ -2,6 +2,7 @@ package com.github.bewithforce.riderapp.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,18 +57,18 @@ public class OrdersListAdapter extends BaseAdapter implements ListAdapter {
         int status = list.get(position).getStatus();
 
         TextView number = view.findViewById(R.id.order_number_orders_fragment);
-        number.setText(list.get(position).getCustomerAdress());
+        number.setText(list.get(position).getId());
 
         TextView time = view.findViewById(R.id.waiting_time_orders_fragment);
         TextView address = view.findViewById(R.id.address_orders_fragment);
         switch (status) {
             case 1:
-                address.setText(list.get(position).getRestaurantAdress());
-                time.setText(list.get(position).getRestaurantArivalTime());
+                address.setText(list.get(position).getRestaurant_address());
+                time.setText(list.get(position).getRestaurant_arrival_time());
                 break;
             case 2:
-                address.setText(list.get(position).getCustomerAdress());
-                time.setText(list.get(position).getCustomerArivalTime());
+                address.setText(list.get(position).getDelivery_address());
+                time.setText(list.get(position).getCustomer_arrival_time());
                 break;
         }
 
@@ -75,6 +76,7 @@ public class OrdersListAdapter extends BaseAdapter implements ListAdapter {
         details.setText("ПОДРОБНЕЕ");
         //Handle TextView and display string from your list
 
+        Log.e("veeeee", "list adapted");
         return view;
     }
 }

@@ -18,7 +18,11 @@ import com.github.bewithforce.riderapp.gui.BaseActivity;
 import com.github.bewithforce.riderapp.gui.LogInActivity.LoginActivity;
 import com.github.bewithforce.riderapp.post.APIClient;
 import com.github.bewithforce.riderapp.post.CallAPI;
+import com.github.bewithforce.riderapp.post.requestBeans.Order;
 import com.github.bewithforce.riderapp.post.requestBeans.Orders;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,16 +34,10 @@ public class OrdersFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d("veeeeee", "oncreateView");
+        Log.e("veeeeee", "oncreateView");
         super.onCreateView(inflater, container, savedInstanceState);
         View temp = inflater.inflate(R.layout.orders_list_fragment, container, false);
         this.mView = temp;
-        getListView().setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
-            getFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.base_fragment, new OrdersFragment())
-                    .commit();
-        });
         return temp;
     }
 
@@ -47,24 +45,28 @@ public class OrdersFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         callAPI = APIClient.getClient().create(CallAPI.class);
-
+        getListView().setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
+            getFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.base_fragment, new OrdersFragment())
+                    .commit();
+        });
         SharedPreferences prefs = this.getActivity().getSharedPreferences("session_token", Context.MODE_PRIVATE);
         String token = prefs.getString("token", null);
 
-        Call<Orders> call = callAPI.getOrders(token);
-        call.enqueue(new Callback<Orders>() {
+        Call<List<Order>> call = callAPI.getOrders(token);
+        call.enqueue(new Callback<List<Order>>() {
             @Override
-            public void onResponse(Call<Orders> call, Response<Orders> response) {
-
+            public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
                 switch (response.code()){
                     case 200:
                         try {
-                            Orders orders = call.execute().body();
-                            OrdersListAdapter adapter = new OrdersListAdapter(orders.getOrders(), mView.getContext());
+                            List<Order> orders = response.body();
+                            OrdersListAdapter adapter = new OrdersListAdapter(orders, mView.getContext());
                             getListView().setAdapter(adapter);
                         }
                         catch (Exception e){
-                            Log.e("token", e.getLocalizedMessage());
+                            Log.e("veeeeee", e.getMessage());
                         }
                         break;
                     case 401:
@@ -75,7 +77,8 @@ public class OrdersFragment extends ListFragment {
             }
 
             @Override
-            public void onFailure(Call<Orders> call, Throwable t) {
+            public void onFailure(Call<List<Order>> call, Throwable t) {
+                Log.e("veeeeee", t.getLocalizedMessage());
                 call.cancel();
             }
         });

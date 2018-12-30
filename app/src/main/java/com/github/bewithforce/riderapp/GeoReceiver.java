@@ -22,7 +22,6 @@ public class GeoReceiver extends BroadcastReceiver {
 
         SharedPreferences prefs = context.getSharedPreferences("session_token", Context.MODE_PRIVATE);
         String token = prefs.getString("token", null);
-        Log.d("veeeeeToken", token);
 
         CourierLocation location = new CourierLocation();
         location.setLatitude(intent.getExtras().getDouble("latitude"));

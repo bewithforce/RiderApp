@@ -44,7 +44,6 @@ public class GeoService extends Service {
             @Override
             public void onLocationChanged(Location location) {
                 Intent mBroadcastIntent = new Intent();
-                Log.e("veeeeeeee", "location was changed");
                 mBroadcastIntent.setAction("com.github.bewithforce.riderapp");
                 mBroadcastIntent.putExtra("latitude", location.getLatitude());
                 mBroadcastIntent.putExtra("longitude", location.getLongitude());

@@ -3,6 +3,7 @@ package com.github.bewithforce.riderapp.gui.LogInActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,10 @@ import com.github.bewithforce.riderapp.post.APIClient;
 import com.github.bewithforce.riderapp.post.CallAPI;
 import com.github.bewithforce.riderapp.post.requestBeans.JsonWebToken;
 import com.github.bewithforce.riderapp.post.requestBeans.Login;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -70,6 +75,13 @@ public class LoginActivity extends AppCompatActivity {
                             return;
                         }
                         Log.d("token_received", token);
+
+                        Date date = new Date(System.currentTimeMillis()); //or simply new Date();
+                        long millis = date.getTime();
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
+                        preferences .edit().putString("token_date", sdf.format(date)).apply();
+
                         SharedPreferences.Editor editor = getSharedPreferences("session_token", MODE_PRIVATE).edit();
                         editor.putString("token", token);
                         editor.apply();

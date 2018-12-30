@@ -1,97 +1,109 @@
 package com.github.bewithforce.riderapp.post.requestBeans;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 public class Order {
+    private int id;
+    private int status;
+    private double delivery_longitude;
+    private double delivery_latitude;
+    private String delivery_address;
+    private String restaurant_arrival_time;
+    private String customer_arrival_time;
+    private double restaurant_longitude;
+    private double restaurant_latitude;
+    private String restaurant_address;
 
-    @SerializedName("id")
-    @Expose
-    private Integer id;
-    @SerializedName("status")
-    @Expose
-    private Integer status;
-    @SerializedName("restaurant_location")
-    @Expose
-    private RestaurantLocation restaurantLocation;
-    @SerializedName("restaurant_adress")
-    @Expose
-    private String restaurantAdress;
-    @SerializedName("restaurant_arival_time")
-    @Expose
-    private String restaurantArivalTime;
-    @SerializedName("customer_location")
-    @Expose
-    private CustomerLocation customerLocation;
-    @SerializedName("customer_adress")
-    @Expose
-    private String customerAdress;
-    @SerializedName("customer_arival_time")
-    @Expose
-    private String customerArivalTime;
+    public Order(int id, int status, double delivery_longitude, double delivery_latitude, String delivery_address, String restaurant_arrival_time, String customer_arrival_time, double restaurant_longitude, double restaurant_latitude, String restaurant_address) {
+        this.id = id;
+        this.status = status;
+        this.delivery_longitude = delivery_longitude;
+        this.delivery_latitude = delivery_latitude;
+        this.delivery_address = delivery_address;
+        this.restaurant_arrival_time = restaurant_arrival_time;
+        this.customer_arrival_time = customer_arrival_time;
+        this.restaurant_longitude = restaurant_longitude;
+        this.restaurant_latitude = restaurant_latitude;
+        this.restaurant_address = restaurant_address;
+    }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public double getDelivery_longitude() {
+        return delivery_longitude;
+    }
+
+    public double getDelivery_latitude() {
+        return delivery_latitude;
+    }
+
+    public String getDelivery_address() {
+        return delivery_address;
+    }
+
+    public String getRestaurant_arrival_time() {
+        return restaurant_arrival_time;
+    }
+
+    public String getCustomer_arrival_time() {
+        return customer_arrival_time;
+    }
+
+    public double getRestaurant_longitude() {
+        return restaurant_longitude;
+    }
+
+    public double getRestaurant_latitude() {
+        return restaurant_latitude;
+    }
+
+    public String getRestaurant_address() {
+        return restaurant_address;
+    }
+
+    // Setter Methods
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setStatus(int status) {
         this.status = status;
     }
 
-    public RestaurantLocation getRestaurantLocation() {
-        return restaurantLocation;
+    public void setDelivery_longitude(double delivery_longitude) {
+        this.delivery_longitude = delivery_longitude;
     }
 
-    public void setRestaurantLocation(RestaurantLocation restaurantLocation) {
-        this.restaurantLocation = restaurantLocation;
+    public void setDelivery_latitude(double delivery_latitude) {
+        this.delivery_latitude = delivery_latitude;
     }
 
-    public String getRestaurantAdress() {
-        return restaurantAdress;
+    public void setDelivery_address(String delivery_address) {
+        this.delivery_address = delivery_address;
     }
 
-    public void setRestaurantAdress(String restaurantAdress) {
-        this.restaurantAdress = restaurantAdress;
+    public void setRestaurant_arrival_time(String restaurant_arrival_time) {
+        this.restaurant_arrival_time = restaurant_arrival_time;
     }
 
-    public String getRestaurantArivalTime() {
-        return restaurantArivalTime;
+    public void setCustomer_arrival_time(String customer_arrival_time) {
+        this.customer_arrival_time = customer_arrival_time;
     }
 
-    public void setRestaurantArivalTime(String restaurantArivalTime) {
-        this.restaurantArivalTime = restaurantArivalTime;
+    public void setRestaurant_longitude(double restaurant_longitude) {
+        this.restaurant_longitude = restaurant_longitude;
     }
 
-    public CustomerLocation getCustomerLocation() {
-        return customerLocation;
+    public void setRestaurant_latitude(double restaurant_latitude) {
+        this.restaurant_latitude = restaurant_latitude;
     }
 
-    public void setCustomerLocation(CustomerLocation customerLocation) {
-        this.customerLocation = customerLocation;
+    public void setRestaurant_address(String restaurant_address) {
+        this.restaurant_address = restaurant_address;
     }
-
-    public String getCustomerAdress() {
-        return customerAdress;
-    }
-
-    public void setCustomerAdress(String customerAdress) {
-        this.customerAdress = customerAdress;
-    }
-
-    public String getCustomerArivalTime() {
-        return customerArivalTime;
-    }
-
-    public void setCustomerArivalTime(String customerArivalTime) {
-        this.customerArivalTime = customerArivalTime;
-    }
-
 }

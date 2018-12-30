@@ -29,7 +29,7 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_activity);
         BottomNavigationView view = findViewById(R.id.navigation);
-        geoIntent = new Intent(this, GeoService.class);
+        geoIntent = new Intent(getApplicationContext(), GeoService.class);
         receiver = new GeoReceiver();
         if(!checkIfAlreadyHavePermission()){
             Log.e("veeeeeeeee", "we will receive");

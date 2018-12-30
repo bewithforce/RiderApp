@@ -49,7 +49,7 @@ public class OrderFragment extends Fragment {
 
         SharedPreferences prefs = this.getActivity().getSharedPreferences("session_token", Context.MODE_PRIVATE);
         String token = prefs.getString("token", null);
-        Call<OrderWithDishes> call = callAPI.getDetailedOrder(id, token);
+        Call<OrderWithDishes> call = callAPI.getDetailedOrder(token, id);
         call.enqueue(new Callback<OrderWithDishes>() {
             @Override
             public void onResponse(Call<OrderWithDishes> call, Response<OrderWithDishes> response) {
