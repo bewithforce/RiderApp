@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 import com.github.bewithforce.riderapp.R;
 import com.github.bewithforce.riderapp.adapters.OrdersListAdapter;
@@ -26,6 +27,7 @@ import retrofit2.Response;
 public class OrdersFragment extends ListFragment {
     private View mView;
     private CallAPI callAPI;
+    private List<Order> orders;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,9 +43,14 @@ public class OrdersFragment extends ListFragment {
         super.onActivityCreated(savedInstanceState);
         callAPI = APIClient.getClient().create(CallAPI.class);
         getListView().setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
+            OrderFragment orderFragment = new OrderFragment();
+            TextView textView = view.findViewById(R.id.order_number_orders_fragment);
+            Bundle arguments = new Bundle();
+            CharSequence sequence = textView.getText();
+            arguments.putString("order_number", sequence.subSequence(1, sequence.length()).toString());
             getFragmentManager()
                     .beginTransaction()
-                    .add(R.id.base_fragment, new OrdersFragment())
+                    .replace(R.id.base_fragment, orderFragment)
                     .commit();
         });
         String token = SessionTools.getToken(getActivity().getBaseContext());

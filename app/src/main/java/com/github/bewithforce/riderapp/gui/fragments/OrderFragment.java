@@ -22,14 +22,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class OrderFragment extends Fragment {
-    private int id;
 
     public OrderFragment(){
         super();
-    }
-
-    public OrderFragment(int id){
-        this.id = id;
     }
 
     @Override
@@ -40,6 +35,7 @@ public class OrderFragment extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        Integer id = Integer.getInteger(savedInstanceState.getString("order_number"));
         super.onActivityCreated(savedInstanceState);
         TextView cash = getView().findViewById(R.id.cash_received);
         TextView orders_completed = getView().findViewById(R.id.orders_completed);
@@ -56,7 +52,6 @@ public class OrderFragment extends Fragment {
                     case 200:
                         try {
                             OrderWithDishes orderWithDishes = call.execute().body();
-
                         }
                         catch (Exception e){
                             Log.e("token", e.getLocalizedMessage());

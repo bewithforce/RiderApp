@@ -1,4 +1,4 @@
-package com.github.bewithforce.riderapp;
+package com.github.bewithforce.riderapp.services;
 
 import android.app.Service;
 import android.content.Context;

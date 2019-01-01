@@ -1,4 +1,4 @@
-package com.github.bewithforce.riderapp;
+package com.github.bewithforce.riderapp.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

@@ -12,8 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.github.bewithforce.riderapp.GeoReceiver;
-import com.github.bewithforce.riderapp.GeoService;
+import com.github.bewithforce.riderapp.receivers.GeoReceiver;
+import com.github.bewithforce.riderapp.services.GeoService;
 import com.github.bewithforce.riderapp.R;
 import com.github.bewithforce.riderapp.gui.fragments.OrdersFragment;
 import com.github.bewithforce.riderapp.gui.fragments.StatsFragment;
@@ -42,7 +42,6 @@ public class BaseActivity extends AppCompatActivity {
             registerReceiver(receiver, filter);
             startService(geoIntent);
         }
-
         view.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.action_orders:
@@ -68,6 +67,7 @@ public class BaseActivity extends AppCompatActivity {
             return false;
 
         });
+        view.setSelectedItemId(R.id.action_orders);
 
     }
 

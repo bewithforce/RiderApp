@@ -30,12 +30,12 @@
         <activity android:name=".gui.BaseActivity" />
 
         <service
-            android:name=".GeoService"
+            android:name=".services.GeoService"
             android:enabled="true"
             android:exported="true" />
 
         <receiver
-            android:name=".GeoReceiver"
+            android:name=".receivers.GeoReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -43,7 +43,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>
