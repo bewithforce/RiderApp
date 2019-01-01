@@ -1,8 +1,6 @@
 package com.github.bewithforce.riderapp.gui.fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -16,6 +14,7 @@ import com.github.bewithforce.riderapp.gui.LogInActivity.LoginActivity;
 import com.github.bewithforce.riderapp.post.APIClient;
 import com.github.bewithforce.riderapp.post.CallAPI;
 import com.github.bewithforce.riderapp.post.requestBeans.Stat;
+import com.github.bewithforce.riderapp.tools.SessionTools;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,8 +34,7 @@ public class StatsFragment extends Fragment {
         TextView orders_completed = getView().findViewById(R.id.orders_completed);
         CallAPI callAPI = APIClient.getClient().create(CallAPI.class);
 
-        SharedPreferences prefs = this.getActivity().getSharedPreferences("session_token", Context.MODE_PRIVATE);
-        String token = prefs.getString("token", null);
+        String token = SessionTools.getToken(getActivity().getBaseContext());
         Call<Stat> call = callAPI.getStatiscs(token);
         call.enqueue(new Callback<Stat>() {
             @Override
@@ -65,5 +63,6 @@ public class StatsFragment extends Fragment {
                 call.cancel();
             }
         });
+        Log.e("veeeee", "And we change");
     }
 }

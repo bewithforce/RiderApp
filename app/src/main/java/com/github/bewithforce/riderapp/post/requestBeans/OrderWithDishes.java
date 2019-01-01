@@ -2,9 +2,6 @@ package com.github.bewithforce.riderapp.post.requestBeans;
 
 import java.util.List;
 
-import com.github.bewithforce.riderapp.post.requestBeans.CustomerLocation;
-import com.github.bewithforce.riderapp.post.requestBeans.Dish;
-import com.github.bewithforce.riderapp.post.requestBeans.RestaurantLocation;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -43,9 +40,9 @@ public class OrderWithDishes {
     @SerializedName("customer_phone")
     @Expose
     private String customerPhone;
-    @SerializedName("ordrer_sum")
+    @SerializedName("order_sum")
     @Expose
-    private String ordrerSum;
+    private String orderSum;
     @SerializedName("customer_arival_time")
     @Expose
     private String customerArivalTime;
@@ -141,12 +138,12 @@ public class OrderWithDishes {
         this.customerPhone = customerPhone;
     }
 
-    public String getOrdrerSum() {
-        return ordrerSum;
+    public String getOrderSum() {
+        return orderSum;
     }
 
-    public void setOrdrerSum(String ordrerSum) {
-        this.ordrerSum = ordrerSum;
+    public void setOrderSum(String orderSum) {
+        this.orderSum = orderSum;
     }
 
     public String getCustomerArivalTime() {

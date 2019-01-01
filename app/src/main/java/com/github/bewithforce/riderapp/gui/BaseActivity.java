@@ -11,13 +11,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.FrameLayout;
 
 import com.github.bewithforce.riderapp.GeoReceiver;
 import com.github.bewithforce.riderapp.GeoService;
 import com.github.bewithforce.riderapp.R;
 import com.github.bewithforce.riderapp.gui.fragments.OrdersFragment;
 import com.github.bewithforce.riderapp.gui.fragments.StatsFragment;
+import com.github.bewithforce.riderapp.tools.SessionTools;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -48,18 +48,20 @@ public class BaseActivity extends AppCompatActivity {
                 case R.id.action_orders:
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .add(R.id.base_fragment, new OrdersFragment())
+                            .replace(R.id.base_fragment, new OrdersFragment())
                             .commit();
                     return true;
                 case R.id.action_history:
                     return true;
                 case R.id.action_stats:
+                    Log.e("veeeee", "we can change everything");
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .add(R.id.base_fragment, new StatsFragment())
+                            .replace(R.id.base_fragment, new StatsFragment())
                             .commit();
                     return true;
                 case R.id.action_exit:
+                    SessionTools.removeToken(getBaseContext());
                     finish();
                     return true;
             }
@@ -100,5 +102,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        stopService(geoIntent);
+        unregisterReceiver(receiver);
     }
 }

@@ -1,8 +1,6 @@
 package com.github.bewithforce.riderapp.gui.fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -10,18 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.github.bewithforce.riderapp.R;
 import com.github.bewithforce.riderapp.adapters.OrdersListAdapter;
-import com.github.bewithforce.riderapp.gui.BaseActivity;
 import com.github.bewithforce.riderapp.gui.LogInActivity.LoginActivity;
 import com.github.bewithforce.riderapp.post.APIClient;
 import com.github.bewithforce.riderapp.post.CallAPI;
 import com.github.bewithforce.riderapp.post.requestBeans.Order;
-import com.github.bewithforce.riderapp.post.requestBeans.Orders;
+import com.github.bewithforce.riderapp.tools.SessionTools;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -51,8 +46,7 @@ public class OrdersFragment extends ListFragment {
                     .add(R.id.base_fragment, new OrdersFragment())
                     .commit();
         });
-        SharedPreferences prefs = this.getActivity().getSharedPreferences("session_token", Context.MODE_PRIVATE);
-        String token = prefs.getString("token", null);
+        String token = SessionTools.getToken(getActivity().getBaseContext());
 
         Call<List<Order>> call = callAPI.getOrders(token);
         call.enqueue(new Callback<List<Order>>() {
@@ -71,8 +65,9 @@ public class OrdersFragment extends ListFragment {
                         break;
                     case 401:
                         Intent intent_finish = new Intent(OrdersFragment.this.getActivity(), LoginActivity.class);
-                        startActivity(intent_finish);
+                        SessionTools.removeToken(getContext());
                         OrdersFragment.this.getActivity().finish();
+                        startActivity(intent_finish);
                 }
             }
 

@@ -6,13 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".gui.BaseActivity">
 
-
-
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="0dp"
+        app:labelVisibilityMode="labeled"
         android:layout_marginEnd="0dp"
         android:background="?android:attr/windowBackground"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,19 +19,8 @@
         app:layout_constraintRight_toRightOf="parent"
         app:menu="@menu/bottom_navigation_orders_and_others" />
 
-   <!-- <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="510dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"> -->
-    <fragment
+    <FrameLayout
         android:id="@+id/base_fragment"
-        class="com.github.bewithforce.riderapp.gui.fragments.OrdersFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="0dp"
@@ -43,8 +31,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-  <!--  </FrameLayout> -->
-
 
 </android.support.constraint.ConstraintLayout>

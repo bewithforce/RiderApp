@@ -12,19 +12,6 @@ public class Order {
     private double restaurant_latitude;
     private String restaurant_address;
 
-    public Order(int id, int status, double delivery_longitude, double delivery_latitude, String delivery_address, String restaurant_arrival_time, String customer_arrival_time, double restaurant_longitude, double restaurant_latitude, String restaurant_address) {
-        this.id = id;
-        this.status = status;
-        this.delivery_longitude = delivery_longitude;
-        this.delivery_latitude = delivery_latitude;
-        this.delivery_address = delivery_address;
-        this.restaurant_arrival_time = restaurant_arrival_time;
-        this.customer_arrival_time = customer_arrival_time;
-        this.restaurant_longitude = restaurant_longitude;
-        this.restaurant_latitude = restaurant_latitude;
-        this.restaurant_address = restaurant_address;
-    }
-
     public int getId() {
         return id;
     }

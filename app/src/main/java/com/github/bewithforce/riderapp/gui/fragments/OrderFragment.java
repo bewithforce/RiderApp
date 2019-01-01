@@ -15,9 +15,7 @@ import com.github.bewithforce.riderapp.R;
 import com.github.bewithforce.riderapp.gui.LogInActivity.LoginActivity;
 import com.github.bewithforce.riderapp.post.APIClient;
 import com.github.bewithforce.riderapp.post.CallAPI;
-import com.github.bewithforce.riderapp.post.requestBeans.Order;
 import com.github.bewithforce.riderapp.post.requestBeans.OrderWithDishes;
-import com.github.bewithforce.riderapp.post.requestBeans.Stat;
 
 import retrofit2.Call;
 import retrofit2.Callback;

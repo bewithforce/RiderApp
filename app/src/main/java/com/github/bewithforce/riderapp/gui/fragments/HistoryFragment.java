@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.github.bewithforce.riderapp.R;
-import com.github.bewithforce.riderapp.post.APIClient;
-import com.github.bewithforce.riderapp.post.CallAPI;
 
 public class HistoryFragment extends ListFragment {
     @Override

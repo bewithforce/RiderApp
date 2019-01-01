@@ -1,26 +1,27 @@
 package com.github.bewithforce.riderapp.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.github.bewithforce.riderapp.R;
-import com.github.bewithforce.riderapp.gui.BaseActivity;
-import com.github.bewithforce.riderapp.gui.LogInActivity.LoginActivity;
-import com.github.bewithforce.riderapp.gui.fragments.OrdersFragment;
 import com.github.bewithforce.riderapp.post.requestBeans.Order;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class OrdersListAdapter extends BaseAdapter implements ListAdapter {
+
+    private static class ViewHolder {
+        private TextView number;
+        private TextView time;
+        private TextView address;
+        private TextView details;
+    }
 
     private List<Order> list;
     private Context context;
@@ -48,33 +49,34 @@ public class OrdersListAdapter extends BaseAdapter implements ListAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        ViewHolder holder;
         View view = convertView;
-        if (view == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.orders_list_fragment, null);
+        if(view == null){
+            view = inflater.inflate(R.layout.orders_list_element, parent, false);
+            holder = new ViewHolder();
+            holder.number = view.findViewById(R.id.order_number_orders_fragment);
+            holder.address = view.findViewById(R.id.address_orders_fragment);
+            holder.time = view.findViewById(R.id.waiting_time_orders_fragment);
+            holder.details = view.findViewById(R.id.details_orders_fragment);
+            view.setTag(holder);
+        }else {
+            holder = (ViewHolder)view.getTag();
         }
-
         int status = list.get(position).getStatus();
-
-        TextView number = view.findViewById(R.id.order_number_orders_fragment);
-        number.setText(list.get(position).getId());
-
-        TextView time = view.findViewById(R.id.waiting_time_orders_fragment);
-        TextView address = view.findViewById(R.id.address_orders_fragment);
+        holder.number.setText(String.valueOf(list.get(position).getId()));
         switch (status) {
             case 1:
-                address.setText(list.get(position).getRestaurant_address());
-                time.setText(list.get(position).getRestaurant_arrival_time());
+                holder.address.setText(list.get(position).getRestaurant_address());
+                holder.time.setText(list.get(position).getRestaurant_arrival_time());
                 break;
             case 2:
-                address.setText(list.get(position).getDelivery_address());
-                time.setText(list.get(position).getCustomer_arrival_time());
+                holder.address.setText(list.get(position).getDelivery_address());
+                holder.time.setText(list.get(position).getCustomer_arrival_time());
                 break;
         }
-
-        TextView details = view.findViewById(R.id.details_orders_fragment);
-        details.setText("ПОДРОБНЕЕ");
-        //Handle TextView and display string from your list
+        holder.details.setText("ПОДРОБНЕЕ");
 
         Log.e("veeeee", "list adapted");
         return view;
