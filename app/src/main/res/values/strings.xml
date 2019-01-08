@@ -16,5 +16,9 @@
     <string name="stats_orders_completed">Выполнено заказово за смену:</string>
     <string name="stats_cash_received">Получено наличных денег:</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="order_waiting">Заказ ожидается</string>
+    <string name="more_info">Подробнее</string>
+    <string name="address">Адрес:</string>
+    <string name="restaurant">Ресторан</string>
+    <string name="arrival">Прибытие</string>
 </resources>

@@ -1,6 +1,5 @@
 package com.github.bewithforce.riderapp.gui.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -8,11 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.TextView;
 
 import com.github.bewithforce.riderapp.R;
 import com.github.bewithforce.riderapp.adapters.OrdersListAdapter;
-import com.github.bewithforce.riderapp.gui.LogInActivity.LoginActivity;
 import com.github.bewithforce.riderapp.post.APIClient;
 import com.github.bewithforce.riderapp.post.CallAPI;
 import com.github.bewithforce.riderapp.post.requestBeans.Order;
@@ -43,15 +40,7 @@ public class OrdersFragment extends ListFragment {
         super.onActivityCreated(savedInstanceState);
         callAPI = APIClient.getClient().create(CallAPI.class);
         getListView().setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
-            OrderFragment orderFragment = new OrderFragment();
-            TextView textView = view.findViewById(R.id.order_number_orders_fragment);
-            Bundle arguments = new Bundle();
-            CharSequence sequence = textView.getText();
-            arguments.putString("order_number", sequence.subSequence(1, sequence.length()).toString());
-            getFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.base_fragment, orderFragment)
-                    .commit();
+
         });
         String token = SessionTools.getToken(getActivity().getBaseContext());
 
@@ -71,10 +60,7 @@ public class OrdersFragment extends ListFragment {
                         }
                         break;
                     case 401:
-                        Intent intent_finish = new Intent(OrdersFragment.this.getActivity(), LoginActivity.class);
-                        SessionTools.removeToken(getContext());
-                        OrdersFragment.this.getActivity().finish();
-                        startActivity(intent_finish);
+                        SessionTools.endSession(getActivity().getBaseContext());
                 }
             }
 

@@ -9,6 +9,7 @@ import android.util.Log;
 import com.github.bewithforce.riderapp.post.APIClient;
 import com.github.bewithforce.riderapp.post.CallAPI;
 import com.github.bewithforce.riderapp.post.requestBeans.CourierLocation;
+import com.github.bewithforce.riderapp.tools.SessionTools;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -19,9 +20,7 @@ public class GeoReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         CallAPI callAPI = APIClient.getClient().create(CallAPI.class);
 
-        SharedPreferences prefs = context.getSharedPreferences("session_token", Context.MODE_PRIVATE);
-        String token = prefs.getString("token", null);
-
+        String token = SessionTools.getToken(context);
         CourierLocation location = new CourierLocation();
         location.setLatitude(intent.getExtras().getDouble("latitude"));
         location.setLongitude(intent.getExtras().getDouble("longitude"));
@@ -34,7 +33,7 @@ public class GeoReceiver extends BroadcastReceiver {
                 Log.e("veeeeeeeeFail", response.message());
                 switch (response.code()){
                     case 401:
-                        prefs.edit().clear().apply();
+                        SessionTools.endSession(context);
                 }
             }
 

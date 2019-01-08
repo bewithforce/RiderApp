@@ -36,9 +36,15 @@ public class LoginActivity extends AppCompatActivity {
         EditText login_view = findViewById(R.id.login_text);
         EditText password_view = findViewById(R.id.password_text);
 
-        buttonLogin.setOnClickListener((e) -> {
-            buttonLogin.setClickable(false);
-            String password_value = password_view.getText().toString();
+        buttonLogin.setOnClickListener((e) -> { buttonLogin.setClickable(false);
+          /*  String token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwibG9naW4iOiJTa2FjaGtvREsiLCJlbWFpbCI6InNrYWNoa28uZGVuaXNAZm9vZHRlY2guYnkiLCJwaG9uZSI6IiszNzUyOTYzMDIwMDAiLCJuYW1lIjoi0JTQtdC90LjRgSIsInN1cm5hbWUiOiLQodC60LDRh9C60L4iLCJsYXN0bmFtZSI6ItCa0LjRgNC40LvQu9C-0LLQuNGHIiwiaWF0IjoxNTQ2MjAwNTYyfQ.M0LVBdjU263seA7B9ttWFoT7PAlmjiPB5G_rjlTGAkc";
+            SessionTools.addToken(getBaseContext(), token);
+            Intent intent = new Intent(LoginActivity.this, BaseActivity.class);
+            startActivity(intent);
+            finish();*/
+           String password_value = password_view.getText().toString();
+
+
             String login_value = login_view.getText().toString();
             if(password_value.length() == 0 ||
                     login_value.length() == 0){

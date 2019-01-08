@@ -60,8 +60,7 @@ public class BaseActivity extends AppCompatActivity {
                             .commit();
                     return true;
                 case R.id.action_exit:
-                    SessionTools.removeToken(getBaseContext());
-                    finish();
+                    SessionTools.endSession(getBaseContext());
                     return true;
             }
             return false;

@@ -1,6 +1,5 @@
 package com.github.bewithforce.riderapp.gui.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.bewithforce.riderapp.R;
-import com.github.bewithforce.riderapp.gui.LogInActivity.LoginActivity;
 import com.github.bewithforce.riderapp.post.APIClient;
 import com.github.bewithforce.riderapp.post.CallAPI;
 import com.github.bewithforce.riderapp.post.requestBeans.Stat;
@@ -39,7 +37,6 @@ public class StatsFragment extends Fragment {
         call.enqueue(new Callback<Stat>() {
             @Override
             public void onResponse(Call<Stat> call, Response<Stat> response) {
-
                 switch (response.code()){
                     case 200:
                         try {
@@ -52,9 +49,7 @@ public class StatsFragment extends Fragment {
                         }
                         break;
                     case 401:
-                        Intent intent_finish = new Intent(StatsFragment.this.getActivity(), LoginActivity.class);
-                        startActivity(intent_finish);
-                        StatsFragment.this.getActivity().finish();
+                        SessionTools.endSession(getActivity().getBaseContext());
                 }
             }
 
