@@ -38,21 +38,22 @@ public class OrdersFragment extends ListFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View temp = inflater.inflate(R.layout.orders_list_fragment, container, false);
         this.mView = temp;
+        startTimer(SessionTools.getToken(getActivity().getBaseContext()));
         return temp;
     }
+
 
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         callAPI = APIClient.getClient().create(CallAPI.class);
-        startTimer(SessionTools.getToken(getActivity().getBaseContext()));
     }
 
+
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.e("veeeeOrdersFragmentDie","destroyed");
+    public void onDestroyView() {
+        super.onDestroyView();
         stopTimer();
     }
 
