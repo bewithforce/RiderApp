@@ -35,14 +35,6 @@
             android:exported="true" />
 
         <receiver
-            android:name=".receivers.GeoReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.github.bewithforce.riderapp" />
-            </intent-filter>
-        </receiver>
-        <receiver
             android:name=".alarms.GeoAlarm"
             android:enabled="true"
             android:exported="true"></receiver>

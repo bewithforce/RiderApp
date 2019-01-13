@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.github.bewithforce.riderapp.gui.LogInActivity.LoginActivity;
-import com.github.bewithforce.riderapp.receivers.GeoReceiver;
 import com.github.bewithforce.riderapp.services.GeoService;
 import com.github.bewithforce.riderapp.R;
 import com.github.bewithforce.riderapp.gui.fragments.OrdersFragment;
@@ -23,7 +22,6 @@ import com.github.bewithforce.riderapp.tools.SessionTools;
 
 public class BaseActivity extends AppCompatActivity {
 
-    private GeoReceiver receiver;
     private Intent geoIntent;
 
     @Override
@@ -32,14 +30,10 @@ public class BaseActivity extends AppCompatActivity {
         setContentView(R.layout.base_activity);
         BottomNavigationView view = findViewById(R.id.navigation);
         geoIntent = new Intent(getApplicationContext(), GeoService.class);
-        receiver = new GeoReceiver();
         if(!checkIfAlreadyHavePermission()){
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 7);
         }
         else{
-            IntentFilter filter = new IntentFilter();
-            filter.addAction("com.github.bewithforce.riderapp");
-            registerReceiver(receiver, filter);
             startService(geoIntent);
         }
         view.setOnNavigationItemSelectedListener(item -> {
@@ -100,9 +94,6 @@ public class BaseActivity extends AppCompatActivity {
                 }
                 break;
             default:
-                IntentFilter filter = new IntentFilter();
-                filter.addAction("com.github.bewithforce.riderapp");
-                registerReceiver(receiver, filter);
                 startService(geoIntent);
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
@@ -113,6 +104,5 @@ public class BaseActivity extends AppCompatActivity {
         super.onDestroy();
         Log.e("veeeeBaseActivityDied","all is bad");
         stopService(geoIntent);
-        unregisterReceiver(receiver);
     }
 }
