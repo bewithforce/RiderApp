@@ -1,5 +1,7 @@
 package com.github.bewithforce.riderapp.gui.fragments;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.bewithforce.riderapp.R;
+import com.github.bewithforce.riderapp.gui.LogInActivity.LoginActivity;
 import com.github.bewithforce.riderapp.post.APIClient;
 import com.github.bewithforce.riderapp.post.CallAPI;
 import com.github.bewithforce.riderapp.post.requestBeans.Stat;
@@ -45,19 +48,23 @@ public class StatsFragment extends Fragment {
                             orders_completed.setText(stat.getDeliveryOrders());
                         }
                         catch (Exception e){
-                            Log.e("token", e.getLocalizedMessage());
+                            Log.e("veeeeStatsCallBodyFail", e.getLocalizedMessage());
                         }
                         break;
                     case 401:
-                        SessionTools.endSession(getActivity().getBaseContext());
+                        SessionTools.removeToken(getActivity().getBaseContext());
+                        Context context = getActivity().getBaseContext();
+                        Intent intent = new Intent(context, LoginActivity.class);
+                        context.startActivity(intent);
+                        getActivity().finish();
                 }
             }
 
             @Override
             public void onFailure(Call<Stat> call, Throwable t) {
+                Log.e("veeeeStatsCallFail", t.getLocalizedMessage());
                 call.cancel();
             }
         });
-        Log.e("veeeee", "And we change");
     }
 }

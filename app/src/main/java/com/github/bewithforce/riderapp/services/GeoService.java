@@ -10,10 +10,15 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.github.bewithforce.riderapp.alarms.GeoAlarm;
+import com.github.bewithforce.riderapp.post.requestBeans.CourierLocation;
+import com.github.bewithforce.riderapp.tools.LocationTools;
+
 public class GeoService extends Service {
 
     private LocationManager mLocationManager;
     private LocationListener mLocationListener;
+    private GeoAlarm alarm = new GeoAlarm();
 
     public GeoService() {
     }
@@ -21,14 +26,16 @@ public class GeoService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.e("veeeeeeee", "service was lost");
+        alarm.cancelAlarm(this);
+        Log.e("veeeeServiceDestroy", "service was lost");
         mLocationManager.removeUpdates(mLocationListener);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         foundMeOnTheEarth();
-        Log.e("veeeeeeee", "service was starting");
+        alarm.setAlarm(this);
+        Log.e("veeeeServiceStart", "service was starting");
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -43,11 +50,10 @@ public class GeoService extends Service {
         mLocationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                Intent mBroadcastIntent = new Intent();
-                mBroadcastIntent.setAction("com.github.bewithforce.riderapp");
-                mBroadcastIntent.putExtra("latitude", location.getLatitude());
-                mBroadcastIntent.putExtra("longitude", location.getLongitude());
-                sendBroadcast(mBroadcastIntent);
+                CourierLocation location1 = new CourierLocation();
+                location1.setLongitude(location.getLongitude());
+                location1.setLatitude(location.getLatitude());
+                LocationTools.addToken(GeoService.this, location1);
             }
             @Override
             public void onStatusChanged(String s, int i, Bundle bundle) {}

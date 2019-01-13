@@ -1,19 +1,13 @@
 package com.github.bewithforce.riderapp.tools;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.github.bewithforce.riderapp.gui.LogInActivity.LoginActivity;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import static android.content.Intent.FLAG_ACTIVITY_NO_HISTORY;
 
 public class SessionTools {
 
@@ -29,11 +23,9 @@ public class SessionTools {
             Date New = new Date(System.currentTimeMillis()); //or simply new Date();
             millis_old = Old.getTime();
             millis_new = New.getTime();
-            Log.e("veeeee", Old.toString());
-            Log.e("veeeee", New.toString());
 
         } catch (Exception e) {
-            Log.e("veeeee", e.getLocalizedMessage());
+            Log.e("veeeeCheckToken", e.getLocalizedMessage());
         }
         if (millis_old != null && millis_new != null) {
             if (millis_new - millis_old > 32_400_000) {
@@ -59,13 +51,6 @@ public class SessionTools {
                 .putString("session_token", token)
                 .putString("token_date", sdf.format(date))
                 .apply();
-    }
-
-    public static void endSession(Context context){
-        removeToken(context);
-        Intent intent = new Intent(context, LoginActivity.class);
-        context.startActivity(intent);
-        ((Activity) context).finish();
     }
 
     public static String getToken(Context context){

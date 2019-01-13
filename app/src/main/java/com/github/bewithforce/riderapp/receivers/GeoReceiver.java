@@ -16,12 +16,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class GeoReceiver extends BroadcastReceiver {
+    private CourierLocation location = new CourierLocation();
+
+
+
     @Override
     public void onReceive(Context context, Intent intent) {
         CallAPI callAPI = APIClient.getClient().create(CallAPI.class);
 
         String token = SessionTools.getToken(context);
-        CourierLocation location = new CourierLocation();
         location.setLatitude(intent.getExtras().getDouble("latitude"));
         location.setLongitude(intent.getExtras().getDouble("longitude"));
 
@@ -33,7 +36,7 @@ public class GeoReceiver extends BroadcastReceiver {
                 Log.e("veeeeeeeeFail", response.message());
                 switch (response.code()){
                     case 401:
-                        SessionTools.endSession(context);
+                        SessionTools.removeToken(context);
                 }
             }
 

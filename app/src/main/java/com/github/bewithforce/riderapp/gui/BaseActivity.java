@@ -7,11 +7,13 @@ import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.github.bewithforce.riderapp.gui.LogInActivity.LoginActivity;
 import com.github.bewithforce.riderapp.receivers.GeoReceiver;
 import com.github.bewithforce.riderapp.services.GeoService;
 import com.github.bewithforce.riderapp.R;
@@ -32,35 +34,43 @@ public class BaseActivity extends AppCompatActivity {
         geoIntent = new Intent(getApplicationContext(), GeoService.class);
         receiver = new GeoReceiver();
         if(!checkIfAlreadyHavePermission()){
-            Log.e("veeeeeeeee", "we will receive");
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 7);
         }
         else{
-            Log.e("veeeeeeeee", "already have");
             IntentFilter filter = new IntentFilter();
             filter.addAction("com.github.bewithforce.riderapp");
             registerReceiver(receiver, filter);
             startService(geoIntent);
         }
         view.setOnNavigationItemSelectedListener(item -> {
+            Fragment fragmentInFrame = getSupportFragmentManager()
+                    .findFragmentById(R.id.base_fragment);
             switch (item.getItemId()) {
                 case R.id.action_orders:
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.base_fragment, new OrdersFragment())
-                            .commit();
+                    if(!(fragmentInFrame instanceof OrdersFragment)) {
+                        getSupportFragmentManager().popBackStack();
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.base_fragment, new OrdersFragment())
+                                .commit();
+                    }
                     return true;
                 case R.id.action_history:
                     return true;
                 case R.id.action_stats:
-                    Log.e("veeeee", "we can change everything");
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.base_fragment, new StatsFragment())
-                            .commit();
+                    if(!(fragmentInFrame instanceof StatsFragment)) {
+                        getSupportFragmentManager().popBackStack();
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.base_fragment, new StatsFragment())
+                                .commit();
+                    }
                     return true;
                 case R.id.action_exit:
-                    SessionTools.endSession(getBaseContext());
+                    SessionTools.removeToken(this);
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
                     return true;
             }
             return false;
@@ -101,6 +111,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.e("veeeeBaseActivityDied","all is bad");
         stopService(geoIntent);
         unregisterReceiver(receiver);
     }

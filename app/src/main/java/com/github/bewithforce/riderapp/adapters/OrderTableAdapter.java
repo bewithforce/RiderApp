@@ -1,7 +1,6 @@
 package com.github.bewithforce.riderapp.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +47,6 @@ public class OrderTableAdapter extends BaseAdapter implements ListAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.e("veeeeeTable", "list adapted");
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewHolder holder;
@@ -66,7 +64,6 @@ public class OrderTableAdapter extends BaseAdapter implements ListAdapter {
         holder.dish.setText(list.get(position).getName());
         holder.amount.setText(list.get(position).getCount());
         view.setTag(holder);
-        Log.e("veeeeeTable", "list adapted");
         return view;
     }
 }

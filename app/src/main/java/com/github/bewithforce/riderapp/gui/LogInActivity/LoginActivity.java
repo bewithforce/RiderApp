@@ -71,18 +71,18 @@ public class LoginActivity extends AppCompatActivity {
                             token = "Bearer " + jsonWebToken.getToken();
                         }
                         catch (Exception e){
-                            Log.e("token", e.getLocalizedMessage());
+                            Log.e("veeeeTokenError", e.getLocalizedMessage());
                             return;
                         }
-                        Log.d("token_received", token);
+                        Log.d("veeeeNewToken", token);
                         SessionTools.addToken(getBaseContext(), token);
                     }
                     else{
                         try {
-                            Log.d("token", response.errorBody().string());
+                            Log.d("veeeeTokenErrorBody", response.errorBody().string());
                         }
                         catch (Exception e1){
-                            Log.e("token", e1.getLocalizedMessage());
+                            Log.e("veeeeTokenVeryErrorBody", e1.getLocalizedMessage());
                         }
                     }
                     switch (response.code()){

@@ -1,5 +1,7 @@
 package com.github.bewithforce.riderapp.gui.fragments;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.widget.AdapterView;
 
 import com.github.bewithforce.riderapp.R;
 import com.github.bewithforce.riderapp.adapters.OrdersListAdapter;
+import com.github.bewithforce.riderapp.gui.LogInActivity.LoginActivity;
 import com.github.bewithforce.riderapp.post.APIClient;
 import com.github.bewithforce.riderapp.post.CallAPI;
 import com.github.bewithforce.riderapp.post.requestBeans.Order;
@@ -24,11 +27,9 @@ import retrofit2.Response;
 public class OrdersFragment extends ListFragment {
     private View mView;
     private CallAPI callAPI;
-    private List<Order> orders;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.e("veeeeee", "oncreateView");
         super.onCreateView(inflater, container, savedInstanceState);
         View temp = inflater.inflate(R.layout.orders_list_fragment, container, false);
         this.mView = temp;
@@ -39,9 +40,6 @@ public class OrdersFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         callAPI = APIClient.getClient().create(CallAPI.class);
-        getListView().setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
-
-        });
         String token = SessionTools.getToken(getActivity().getBaseContext());
 
         Call<List<Order>> call = callAPI.getOrders(token);
@@ -56,17 +54,21 @@ public class OrdersFragment extends ListFragment {
                             getListView().setAdapter(adapter);
                         }
                         catch (Exception e){
-                            Log.e("veeeeee", e.getMessage());
+                            Log.e("veeeeCallOrdersBodyFail", e.getMessage());
                         }
                         break;
                     case 401:
-                        SessionTools.endSession(getActivity().getBaseContext());
+                        SessionTools.removeToken(getActivity().getBaseContext());
+                        Context context = getActivity().getBaseContext();
+                        Intent intent = new Intent(context, LoginActivity.class);
+                        context.startActivity(intent);
+                        getActivity().finish();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Order>> call, Throwable t) {
-                Log.e("veeeeee", t.getLocalizedMessage());
+                Log.e("veeeeCallOrdersFail", t.getLocalizedMessage());
                 call.cancel();
             }
         });
