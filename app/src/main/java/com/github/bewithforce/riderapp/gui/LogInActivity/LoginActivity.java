@@ -72,12 +72,14 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         catch (Exception e){
                             Log.e("veeeeTokenError", e.getLocalizedMessage());
+                            login_view.setError("что-то не так");
                             return;
                         }
                         Log.d("veeeeNewToken", token);
                         SessionTools.addToken(getBaseContext(), token);
                     }
                     else{
+                        login_view.setError("что-то не так");
                         try {
                             Log.d("veeeeTokenErrorBody", response.errorBody().string());
                         }
@@ -92,14 +94,15 @@ public class LoginActivity extends AppCompatActivity {
                             finish();
                             break;
                         case 403:
-                            login_view.setError(null);
-                        case 401:
-                            password_view.setError(null);
+                            login_view.setError("нет допуска");
+                        case 404:
+                            login_view.setError("неправильный логин или пароль");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<JsonWebToken> call, Throwable t) {
+                    login_view.setError("что-то не так");
                     call.cancel();
                 }
             });
