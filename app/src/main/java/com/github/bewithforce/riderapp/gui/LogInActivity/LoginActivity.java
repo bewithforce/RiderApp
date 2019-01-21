@@ -2,6 +2,7 @@ package com.github.bewithforce.riderapp.gui.LogInActivity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,21 +34,19 @@ public class LoginActivity extends AppCompatActivity {
         Button buttonLogin = findViewById(R.id.buttonLogin);
         Button buttonRegister = findViewById(R.id.buttonRegister);
         TextView textViewFail = findViewById(R.id.textViewFail);
-        EditText login_view = findViewById(R.id.login_text);
-        EditText password_view = findViewById(R.id.password_text);
+        EditText loginInput = findViewById(R.id.login_text);
+        EditText passwordInput = findViewById(R.id.password_text);
+        TextInputLayout loginLayout = findViewById(R.id.passwordInputLayout);
 
-        buttonLogin.setOnClickListener((e) -> { buttonLogin.setClickable(false);
-          /*  String token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwibG9naW4iOiJTa2FjaGtvREsiLCJlbWFpbCI6InNrYWNoa28uZGVuaXNAZm9vZHRlY2guYnkiLCJwaG9uZSI6IiszNzUyOTYzMDIwMDAiLCJuYW1lIjoi0JTQtdC90LjRgSIsInN1cm5hbWUiOiLQodC60LDRh9C60L4iLCJsYXN0bmFtZSI6ItCa0LjRgNC40LvQu9C-0LLQuNGHIiwiaWF0IjoxNTQ2MjAwNTYyfQ.M0LVBdjU263seA7B9ttWFoT7PAlmjiPB5G_rjlTGAkc";
-            SessionTools.addToken(getBaseContext(), token);
-            Intent intent = new Intent(LoginActivity.this, BaseActivity.class);
-            startActivity(intent);
-            finish();*/
-           String password_value = password_view.getText().toString();
+        buttonLogin.setOnClickListener((e) -> {
+            buttonLogin.setClickable(false);
+            loginLayout.setError(null);
+            String password_value = passwordInput.getText().toString();
 
 
-            String login_value = login_view.getText().toString();
-            if(password_value.length() == 0 ||
-                    login_value.length() == 0){
+            String login_value = loginInput.getText().toString();
+            if (password_value.length() == 0 ||
+                    login_value.length() == 0) {
                 return;
             }
 
@@ -63,46 +62,43 @@ public class LoginActivity extends AppCompatActivity {
                 public void onResponse(Call<JsonWebToken> call, Response<JsonWebToken> response) {
                     JsonWebToken jsonWebToken = response.body();
                     String token;
-                    if(jsonWebToken != null){
+                    if (jsonWebToken != null) {
                         try {
-                            if(jsonWebToken.getToken() == null){
+                            if (jsonWebToken.getToken() == null) {
                                 throw new Exception("bad news");
                             }
                             token = "Bearer " + jsonWebToken.getToken();
-                        }
-                        catch (Exception e){
+                        } catch (Exception e) {
                             Log.e("veeeeTokenError", e.getLocalizedMessage());
-                            login_view.setError("что-то не так");
+                            loginLayout.setError("что-то не так");
                             return;
                         }
                         Log.d("veeeeNewToken", token);
                         SessionTools.addToken(getBaseContext(), token);
-                    }
-                    else{
-                        login_view.setError("что-то не так");
+                    } else {
+                        loginLayout.setError("что-то не так");
                         try {
                             Log.d("veeeeTokenErrorBody", response.errorBody().string());
-                        }
-                        catch (Exception e1){
+                        } catch (Exception e1) {
                             Log.e("veeeeTokenVeryErrorBody", e1.getLocalizedMessage());
                         }
                     }
-                    switch (response.code()){
+                    switch (response.code()) {
                         case 200:
                             Intent intent = new Intent(LoginActivity.this, BaseActivity.class);
                             startActivity(intent);
                             finish();
                             break;
                         case 403:
-                            login_view.setError("нет допуска");
+                            loginLayout.setError("нет допуска");
                         case 404:
-                            login_view.setError("неправильный логин или пароль");
+                            loginLayout.setError("неправильный логин или пароль");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<JsonWebToken> call, Throwable t) {
-                    login_view.setError("что-то не так");
+                    loginLayout.setError("что-то не так");
                     call.cancel();
                 }
             });

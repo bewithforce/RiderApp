@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -20,29 +21,27 @@
     </TextView>
 
     <TextView
-        android:id="@android:id/empty"
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="25dp"
         android:text="@string/stats_orders_completed"
         android:textColor="#232F34"
         android:textSize="18sp"
+        tools:layout_editor_absoluteY="163dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stats_title_textView">
+        app:layout_constraintTop_toBottomOf="@+id/textView39" >
     </TextView>
 
     <TextView
-        android:id="@android:id/empty"
+        android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="58dp"
+        android:layout_marginTop="68dp"
         android:text="@string/stats_cash_received"
         android:textColor="#232F34"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stats_title_textView">
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
     </TextView>
 
 
@@ -50,25 +49,47 @@
         android:id="@+id/orders_completed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="62dp"
-        android:layout_marginEnd="7dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="96dp"
         android:textColor="#F9AA33"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@+id/textView3">
     </TextView>
 
     <TextView
         android:id="@+id/cash_received"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="7dp"
-        android:layout_marginTop="95dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="128dp"
         android:textColor="#F9AA33"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@+id/textView6">
     </TextView>
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="9dp"
+        android:text="Принимать заказы"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stats_title_textView" />
+
+    <TextView
+        android:id="@+id/textView39"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="12dp"
+        android:text="Статистика:"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch1" />
 
 
 </android.support.constraint.ConstraintLayout>

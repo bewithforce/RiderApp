@@ -7,6 +7,7 @@ import com.github.bewithforce.riderapp.post.requestBeans.Order;
 import com.github.bewithforce.riderapp.post.requestBeans.OrderWithDishes;
 import com.github.bewithforce.riderapp.post.requestBeans.Orders;
 import com.github.bewithforce.riderapp.post.requestBeans.Stat;
+import com.github.bewithforce.riderapp.post.requestBeans.Status;
 
 import java.util.List;
 
@@ -34,9 +35,11 @@ public interface CallAPI {
     @GET("statistics")
     Call<Stat> getStatiscs(@Header("token") String token);
 
-    //не описано
-    @GET()
-    Call<Orders> getOrdersHistory(@Header("authorization")String token);
+    @GET("take_orders")
+    Call<Status> getStatus(@Header("token") String token);
+
+    @POST("take_orders")
+    Call<Void> postStatus(@Header("token") String token, @Body Status status);
 
     @POST("arrivedtorestaurant")
     Call<Void> arrivedToRestaurant(@Header("authorization")String token);

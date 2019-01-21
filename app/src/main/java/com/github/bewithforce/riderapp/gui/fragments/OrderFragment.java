@@ -34,6 +34,12 @@ import retrofit2.Response;
 public class OrderFragment extends Fragment {
 
     private View mView;
+    private Button customer;
+    private CallAPI callAPI;
+    private Button restaurant;
+    private String token;
+    private TextView back;
+    private Integer id;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,66 +51,71 @@ public class OrderFragment extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        Integer id = Integer.valueOf(getArguments().getString("order_number"));
         super.onActivityCreated(savedInstanceState);
 
-        CallAPI callAPI = APIClient.getClient().create(CallAPI.class);
-        String token = SessionTools.getToken(getActivity().getBaseContext());
+        id = Integer.valueOf(getArguments().getString("order_number"));
+        callAPI = APIClient.getClient().create(CallAPI.class);
+        token = SessionTools.getToken(getActivity().getBaseContext());
+        restaurant = getView().findViewById(R.id.arrivedShopOrder);
+        customer = getView().findViewById(R.id.arrivedClientOrder);
+        back = getView().findViewById(R.id.backButton);
 
-        TextView back = getView().findViewById(R.id.backButton);
-        back.setOnClickListener(e->{
-            getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.base_fragment, new OrdersFragment())
-                    .commit();
-        });
-
-
-        Button restaurant = getView().findViewById(R.id.arrivedShopOrder);
+        back.setOnClickListener(e -> getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.base_fragment, new OrdersFragment())
+                .commit()
+        );
         restaurant.setOnClickListener(e -> {
-            Call<Void> call = callAPI.arrivedToRestaurant(token);
-            call.enqueue(new Callback<Void>() {
+            Call<Void> smallCall = callAPI.arrivedToRestaurant(token);
+            smallCall.enqueue(new Callback<Void>() {
                 @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
+                public void onResponse(Call<Void> litCall, Response<Void> response) {
+                    restaurant.setClickable(false);
+                    customer.setClickable(true);
                 }
 
                 @Override
-                public void onFailure(Call<Void> call, Throwable t) {
+                public void onFailure(Call<Void> litCall, Throwable t) {
+                    customer.setClickable(false);
                 }
             });
         });
-
-        Button customer = getView().findViewById(R.id.arrivedClientOrder);
         customer.setOnClickListener(e -> {
-            Call<Void> call = callAPI.arrivedToCustomer(token);
-            call.enqueue(new Callback<Void>() {
+            Call<Void> smallCall = callAPI.arrivedToCustomer(token);
+            smallCall.enqueue(new Callback<Void>() {
                 @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
+                public void onResponse(Call<Void> litCall, Response<Void> response) {
+                    makeCall();
                 }
 
                 @Override
-                public void onFailure(Call<Void> call, Throwable t) {
+                public void onFailure(Call<Void> litCall, Throwable t) {
                 }
             });
         });
+        makeCall();
+    }
 
-
+    private void makeCall(){
         Call<OrderWithDishes> call = callAPI.getDetailedOrder(token, id);
         call.enqueue(new Callback<OrderWithDishes>() {
             @Override
             public void onResponse(Call<OrderWithDishes> call, Response<OrderWithDishes> response) {
-
                 switch (response.code()) {
                     case 200:
                         try {
                             OrderWithDishes orderWithDishes = response.body();
 
-                            switch (orderWithDishes.getStatus()){
-                                case 0: case 2: case 3:
+                            switch (orderWithDishes.getStatus()) {
+                                case 0:
+                                case 2:
+                                case 3:
                                     restaurant.setClickable(true);
                                     customer.setClickable(false);
                                     break;
-                                case 1: case 4: case 5:
+                                case 1:
+                                case 4:
+                                case 5:
                                     restaurant.setClickable(false);
                                     customer.setClickable(true);
                                     break;
@@ -127,14 +138,14 @@ public class OrderFragment extends Fragment {
                             restaurant_time.setText(createBeautifulDate.format(restaurant_date));
 
                             TextView restaurant_phone = getView().findViewById(R.id.phone1Order);
-                            if(orderWithDishes.getRestaurant_phone() != null) {
+                            if (orderWithDishes.getRestaurant_phone() != null) {
                                 StringBuilder builder = new StringBuilder();
                                 if (orderWithDishes.getRestaurant_phone().charAt(0) != '+') {
                                     builder.append('+');
                                 }
                                 builder.append(orderWithDishes.getRestaurant_phone());
                                 restaurant_phone.setText(builder.toString());
-                            }else{
+                            } else {
                                 restaurant_phone.setText(orderWithDishes.getRestaurant_phone());
                             }
 
@@ -145,14 +156,14 @@ public class OrderFragment extends Fragment {
                             customer_address.setText(orderWithDishes.getDelivery_address());
 
                             TextView customer_phone = getView().findViewById(R.id.phone2Order);
-                            if(orderWithDishes.getCustomer_phone() != null) {
+                            if (orderWithDishes.getCustomer_phone() != null) {
                                 StringBuilder builder = new StringBuilder();
                                 if (orderWithDishes.getCustomer_phone().charAt(0) != '+') {
                                     builder.append('+');
                                 }
                                 builder.append(orderWithDishes.getCustomer_phone());
                                 customer_phone.setText(builder.toString());
-                            }else{
+                            } else {
                                 customer_phone.setText(orderWithDishes.getCustomer_phone());
                             }
 

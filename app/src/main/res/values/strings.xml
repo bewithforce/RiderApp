@@ -8,8 +8,7 @@
     <string name="sign_in_troubles"><u>Не удалось войти?</u></string>
 
     <string name="orders_bottom_menu">Заказы</string>
-    <string name="history_bottom_menu">История</string>
-    <string name="stats_bottom_menu">Отчеты</string>
+    <string name="stats_bottom_menu">Смена</string>
     <string name="exit_bottom_menu">Выход</string>
 
     <string name="stats_title">Отчет курьера</string>

@@ -6,11 +6,6 @@
         android:icon="@drawable/orders_passive"
         android:title="@string/orders_bottom_menu" />
     <item
-        android:id="@+id/action_history"
-        android:visible="true"
-        android:icon="@drawable/history_passive"
-        android:title="@string/history_bottom_menu" />
-    <item
         android:id="@+id/action_stats"
         android:visible="true"
         android:icon="@drawable/stats_passive"

@@ -50,6 +50,11 @@ public class OrdersFragment extends ListFragment {
         callAPI = APIClient.getClient().create(CallAPI.class);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopTimer();
+    }
 
     @Override
     public void onDestroyView() {
@@ -97,7 +102,6 @@ public class OrdersFragment extends ListFragment {
         };
         timer.schedule(task, 1, 10000);
     }
-
 
     private void stopTimer() {
         if (timer != null) {

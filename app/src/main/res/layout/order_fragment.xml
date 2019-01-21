@@ -6,15 +6,15 @@
 
     <TextView
         android:id="@+id/backButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Назад"
+        android:layout_width="89dp"
+        android:layout_height="37dp"
         android:layout_marginTop="8dp"
         android:drawableStart="@drawable/arrow"
         android:fontFamily="@font/open_sans_bold"
+        android:text="Назад"
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="14sp"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
