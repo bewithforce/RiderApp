@@ -25,8 +25,12 @@ public class LocationTools {
     public static CourierLocation getToken(Context context){
         CourierLocation location = new CourierLocation();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        location.setLatitude(Double.parseDouble(preferences.getString("courier_latitude", null)));
-        location.setLongitude(Double.parseDouble(preferences.getString("courier_longitude", null)));
+        try {
+            location.setLatitude(Double.parseDouble(preferences.getString("courier_latitude", null)));
+            location.setLongitude(Double.parseDouble(preferences.getString("courier_longitude", null)));
+        } catch (Exception e){
+            return null;
+        }
         return location;
     }
 }

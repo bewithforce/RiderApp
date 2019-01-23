@@ -107,9 +107,9 @@ public class StatsFragment extends Fragment {
         swi.setOnCheckedChangeListener((e, t) -> {
             Status status = new Status();
             if (t) {
-                status.setStatus(0);
-            } else {
                 status.setStatus(1);
+            } else {
+                status.setStatus(0);
             }
             Call<Void> voidCall = callAPI.postStatus(token, status);
             voidCall.enqueue(new Callback<Void>() {

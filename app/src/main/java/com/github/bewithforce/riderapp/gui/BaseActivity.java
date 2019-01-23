@@ -62,11 +62,11 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_activity);
         BottomNavigationView view = findViewById(R.id.navigation);
-        callAPI = APIClient.getClient().create(CallAPI.class);
-        token = SessionTools.getToken(BaseActivity.this);
         if (!checkIfAlreadyHavePermission()) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 7);
         }
+        callAPI = APIClient.getClient().create(CallAPI.class);
+        token = SessionTools.getToken(BaseActivity.this);
         view.setOnNavigationItemSelectedListener(item -> {
             Fragment fragmentInFrame = getSupportFragmentManager()
                     .findFragmentById(R.id.base_fragment);
@@ -105,6 +105,12 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (checkIfAlreadyHavePermission()) {
+            start();
+        }
+    }
+
+    private void start() {
         LocationRequest mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10 * 1000)
@@ -116,8 +122,10 @@ public class BaseActivity extends AppCompatActivity {
         task.addOnCompleteListener(e -> {
             try {
                 task.getResult(ApiException.class);
-                foundMeOnTheEarth();
-                startTimer();
+                if (mLocationManager == null) {
+                    foundMeOnTheEarth();
+                    startTimer();
+                }
             } catch (ApiException ex) {
                 switch (ex.getStatusCode()) {
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
@@ -135,46 +143,50 @@ public class BaseActivity extends AppCompatActivity {
                         finish();
                         break;
                     default:
-                        foundMeOnTheEarth();
-                        startTimer();
+                        if (mLocationManager == null) {
+                            foundMeOnTheEarth();
+                            startTimer();
+                        }
                 }
             }
         });
     }
 
     private void startTimer() {
-        timer = new Timer();
-        task = new TimerTask() {
-            @Override
-            public void run() {
-                mTimerHandler.post(() -> {
-                    CourierLocation location = LocationTools.getToken(BaseActivity.this);
+        if(timer == null) {
+            timer = new Timer();
+            task = new TimerTask() {
+                @Override
+                public void run() {
+                    mTimerHandler.post(() -> {
+                        CourierLocation location = LocationTools.getToken(BaseActivity.this);
+                        if(location != null) {
+                            Log.e("veeeeGeoAlarm", location.getLatitude().toString() + " and " + location.getLongitude().toString());
+                            Call<Void> call = callAPI.locationReport(token, location);
+                            call.enqueue(new Callback<Void>() {
+                                @Override
+                                public void onResponse(Call<Void> call, Response<Void> response) {
+                                    Log.e("veeeeLocationSend", response.message());
+                                    switch (response.code()) {
+                                        case 401:
+                                            SessionTools.removeToken(getBaseContext());
+                                            Intent intent = new Intent(BaseActivity.this, LoginActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                    }
+                                }
 
-                    Log.e("veeeeGeoAlarm", location.getLatitude().toString() + " and " + location.getLongitude().toString());
-                    Call<Void> call = callAPI.locationReport(token, location);
-                    call.enqueue(new Callback<Void>() {
-                        @Override
-                        public void onResponse(Call<Void> call, Response<Void> response) {
-                            Log.e("veeeeLocationSend", response.message());
-                            switch (response.code()){
-                                case 401:
-                                    SessionTools.removeToken(getBaseContext());
-                                    Intent intent = new Intent(BaseActivity.this, LoginActivity.class);
-                                    startActivity(intent);
-                                    finish();
-
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Void> call, Throwable t) {
-                            call.cancel();
+                                @Override
+                                public void onFailure(Call<Void> call, Throwable t) {
+                                    call.cancel();
+                                }
+                            });
                         }
                     });
-                });
-            }
-        };
-        timer.schedule(task, 1, 30000);
+                }
+            };
+            timer.schedule(task, 1, 30000);
+        }
     }
 
 
@@ -200,7 +212,9 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public void onProviderEnabled(String s) {}
             @Override
-            public void onProviderDisabled(String s) {}
+            public void onProviderDisabled(String s) {
+                start();
+            }
         };
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,30000,50,mLocationListener);
     }
@@ -224,6 +238,8 @@ public class BaseActivity extends AppCompatActivity {
             case 7:
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     finish();
+                } else {
+                    start();
                 }
                 break;
             default:
@@ -237,8 +253,10 @@ public class BaseActivity extends AppCompatActivity {
 
         if (requestCode == 911) {
             if (resultCode == Activity.RESULT_OK) {
-                foundMeOnTheEarth();
-                startTimer();
+                if(mLocationManager == null) {
+                    foundMeOnTheEarth();
+                    startTimer();
+                }
             } else {
                 Toast.makeText(this, "включите GPS", Toast.LENGTH_LONG).show();
             }

@@ -76,7 +76,7 @@ public class OrderFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<Void> litCall, Throwable t) {
-                    customer.setClickable(false);
+                    litCall.cancel();
                 }
             });
         });
@@ -90,6 +90,8 @@ public class OrderFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<Void> litCall, Throwable t) {
+                    litCall.cancel();
+                    customer.setClickable(false);
                 }
             });
         });
