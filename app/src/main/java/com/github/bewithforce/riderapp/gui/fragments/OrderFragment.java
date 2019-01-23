@@ -85,13 +85,12 @@ public class OrderFragment extends Fragment {
             smallCall.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> litCall, Response<Void> response) {
-                    makeCall();
+                    customer.setClickable(false);
                 }
 
                 @Override
                 public void onFailure(Call<Void> litCall, Throwable t) {
                     litCall.cancel();
-                    customer.setClickable(false);
                 }
             });
         });
