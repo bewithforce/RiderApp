@@ -5,10 +5,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class Stat {
 
-    @SerializedName("delivery_orders")
+    @SerializedName("orders_delivered_per_shift")
     @Expose
     private Integer deliveryOrders;
-    @SerializedName("received_money")
+    @SerializedName("summ")
     @Expose
     private Double receivedMoney;
 

@@ -52,9 +52,9 @@
         android:id="@+id/orders_completed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="96dp"
+        android:layout_marginEnd="128dp"
         android:textColor="#F9AA33"
-        android:textSize="16sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView3">
     </TextView>
@@ -66,7 +66,7 @@
         android:layout_marginTop="0dp"
         android:layout_marginEnd="128dp"
         android:textColor="#F9AA33"
-        android:textSize="14sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView6">
     </TextView>

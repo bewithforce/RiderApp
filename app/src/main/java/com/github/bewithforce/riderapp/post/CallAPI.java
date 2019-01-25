@@ -5,9 +5,9 @@ import com.github.bewithforce.riderapp.post.requestBeans.JsonWebToken;
 import com.github.bewithforce.riderapp.post.requestBeans.Login;
 import com.github.bewithforce.riderapp.post.requestBeans.Order;
 import com.github.bewithforce.riderapp.post.requestBeans.OrderWithDishes;
-import com.github.bewithforce.riderapp.post.requestBeans.Orders;
 import com.github.bewithforce.riderapp.post.requestBeans.Stat;
-import com.github.bewithforce.riderapp.post.requestBeans.Status;
+import com.github.bewithforce.riderapp.post.requestBeans.ReceivedStatus;
+import com.github.bewithforce.riderapp.post.requestBeans.StatusToSend;
 
 import java.util.List;
 
@@ -33,18 +33,18 @@ public interface CallAPI {
     Call<OrderWithDishes> getDetailedOrder(@Header("authorization")String token, @Path("id") int orderId);
 
     @GET("statistics")
-    Call<Stat> getStatiscs(@Header("token") String token);
+    Call<Stat> getStatiscs(@Header("authorization") String token);
 
     @GET("take_orders")
-    Call<Status> getStatus(@Header("token") String token);
+    Call<ReceivedStatus> getStatus(@Header("authorization") String token);
 
     @POST("take_orders")
-    Call<Void> postStatus(@Header("token") String token, @Body Status status);
+    Call<Void> postStatus(@Header("authorization") String token, @Body StatusToSend status);
 
-    @POST("arrivedtorestaurant")
-    Call<Void> arrivedToRestaurant(@Header("authorization")String token);
+    @POST("order/{id}/arrivedtorestaurant")
+    Call<Void> arrivedToRestaurant(@Header("authorization")String token, @Path("id") int orderId);
 
-    @POST("arrivedtocustomer")
-    Call<Void> arrivedToCustomer(@Header("authorization")String token);
+    @POST("order/{id}/arrivedtocustomer")
+    Call<Void> arrivedToCustomer(@Header("authorization")String token, @Path("id") int orderId);
 
 }

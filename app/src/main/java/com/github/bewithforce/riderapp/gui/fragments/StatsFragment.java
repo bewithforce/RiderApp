@@ -16,7 +16,8 @@ import com.github.bewithforce.riderapp.gui.LogInActivity.LoginActivity;
 import com.github.bewithforce.riderapp.post.APIClient;
 import com.github.bewithforce.riderapp.post.CallAPI;
 import com.github.bewithforce.riderapp.post.requestBeans.Stat;
-import com.github.bewithforce.riderapp.post.requestBeans.Status;
+import com.github.bewithforce.riderapp.post.requestBeans.ReceivedStatus;
+import com.github.bewithforce.riderapp.post.requestBeans.StatusToSend;
 import com.github.bewithforce.riderapp.tools.SessionTools;
 
 import retrofit2.Call;
@@ -46,9 +47,9 @@ public class StatsFragment extends Fragment {
                 switch (response.code()) {
                     case 200:
                         try {
-                            Stat stat = call.execute().body();
+                            Stat stat = response.body();
                             cash.setText(stat.getReceivedMoney().toString());
-                            orders_completed.setText(stat.getDeliveryOrders());
+                            orders_completed.setText(stat.getDeliveryOrders().toString());
                         } catch (Exception e) {
                             Log.e("veeeeStatsCallBodyFail", e.getLocalizedMessage());
                         }
@@ -69,16 +70,18 @@ public class StatsFragment extends Fragment {
             }
         });
 
-        Call<Status> call = callAPI.getStatus(token);
-        call.enqueue(new Callback<Status>() {
+        Call<ReceivedStatus> call = callAPI.getStatus(token);
+        call.enqueue(new Callback<ReceivedStatus>() {
             @Override
-            public void onResponse(Call<Status> call, Response<Status> response) {
+            public void onResponse(Call<ReceivedStatus> call, Response<ReceivedStatus> response) {
                 switch (response.code()) {
                     case 200:
                         try {
-                            Status stat = response.body();
+                            ReceivedStatus stat = response.body();
+
                             if (stat != null) {
-                                if (stat.getStatus() == 0) {
+                                Log.e("veeeeStatsCallBodyFail", Boolean.toString(stat.getStatus()));
+                                if (!stat.getStatus()) {
                                     swi.setChecked(false);
                                 } else {
                                     swi.setChecked(true);
@@ -98,14 +101,14 @@ public class StatsFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<Status> call, Throwable t) {
+            public void onFailure(Call<ReceivedStatus> call, Throwable t) {
                 Log.e("veeeeStatsCallFail", t.getLocalizedMessage());
                 call.cancel();
             }
         });
 
         swi.setOnCheckedChangeListener((e, t) -> {
-            Status status = new Status();
+            StatusToSend status = new StatusToSend();
             if (t) {
                 status.setStatus(1);
             } else {

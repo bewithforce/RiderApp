@@ -66,7 +66,7 @@ public class OrderFragment extends Fragment {
                 .commit()
         );
         restaurant.setOnClickListener(e -> {
-            Call<Void> smallCall = callAPI.arrivedToRestaurant(token);
+            Call<Void> smallCall = callAPI.arrivedToRestaurant(token, id);
             smallCall.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> litCall, Response<Void> response) {
@@ -81,7 +81,7 @@ public class OrderFragment extends Fragment {
             });
         });
         customer.setOnClickListener(e -> {
-            Call<Void> smallCall = callAPI.arrivedToCustomer(token);
+            Call<Void> smallCall = callAPI.arrivedToCustomer(token, id);
             smallCall.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> litCall, Response<Void> response) {
