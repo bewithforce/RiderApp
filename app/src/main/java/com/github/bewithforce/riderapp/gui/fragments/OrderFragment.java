@@ -2,12 +2,15 @@ package com.github.bewithforce.riderapp.gui.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,13 +20,17 @@ import com.github.bewithforce.riderapp.adapters.OrderTableAdapter;
 import com.github.bewithforce.riderapp.gui.LogInActivity.LoginActivity;
 import com.github.bewithforce.riderapp.post.APIClient;
 import com.github.bewithforce.riderapp.post.CallAPI;
+import com.github.bewithforce.riderapp.post.requestBeans.Dish;
 import com.github.bewithforce.riderapp.post.requestBeans.OrderWithDishes;
+import com.github.bewithforce.riderapp.post.requestBeans.Phone;
 import com.github.bewithforce.riderapp.tools.SessionTools;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -94,10 +101,27 @@ public class OrderFragment extends Fragment {
                 }
             });
         });
+
+        Button sayProblemsOrder = getView().findViewById(R.id.sayProblemsOrder);
+        sayProblemsOrder.setOnClickListener(e -> {
+            Call<Phone> problemsCall = callAPI.getPhone(token);
+            problemsCall.enqueue(new Callback<Phone>() {
+                @Override
+                public void onResponse(Call<Phone> call, Response<Phone> response) {
+                    Intent browserIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + response.body().getPhone()));
+                    startActivity(browserIntent);
+                }
+
+                @Override
+                public void onFailure(Call<Phone> call, Throwable t) {
+
+                }
+            });
+        });
         makeCall();
     }
 
-    private void makeCall(){
+    private void makeCall() {
         Call<OrderWithDishes> call = callAPI.getDetailedOrder(token, id);
         call.enqueue(new Callback<OrderWithDishes>() {
             @Override
@@ -180,6 +204,18 @@ public class OrderFragment extends Fragment {
                                     mView.getContext());
                             ListView mRecycler = includedView.findViewById(R.id.recyclerView_dishes);
                             mRecycler.setAdapter(adapter);
+                            View view = getView().findViewById(R.id.view);
+                            mRecycler.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                                @Override
+                                public void onGlobalLayout() {
+                                    ConstraintLayout layout = includedView.findViewById(R.id.constraintLayout);
+                                    view.setLayoutParams(new ConstraintLayout.LayoutParams(view.getWidth(),
+                                            mRecycler.getMeasuredHeightAndState() + 75));
+                                    getView().requestLayout();
+                                    Log.e("asdasdasd", Integer.toString(mRecycler.getMeasuredHeightAndState() + layout.getHeight()));
+                                    mRecycler.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                }
+                            });
                         } catch (Exception e) {
                             Log.e("veeeeOrderFragmentFail", e.getLocalizedMessage());
                         }
@@ -195,6 +231,8 @@ public class OrderFragment extends Fragment {
 
             @Override
             public void onFailure(Call<OrderWithDishes> call, Throwable t) {
+
+
                 call.cancel();
             }
         });

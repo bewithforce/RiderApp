@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ListFragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,6 +95,7 @@ public class OrdersFragment extends ListFragment {
                         @Override
                         public void onFailure(Call<List<Order>> call, Throwable t) {
                             Log.e("veeeeCallOrdersFail", t.getLocalizedMessage());
+
                             call.cancel();
                         }
                     });

@@ -5,6 +5,7 @@ import com.github.bewithforce.riderapp.post.requestBeans.JsonWebToken;
 import com.github.bewithforce.riderapp.post.requestBeans.Login;
 import com.github.bewithforce.riderapp.post.requestBeans.Order;
 import com.github.bewithforce.riderapp.post.requestBeans.OrderWithDishes;
+import com.github.bewithforce.riderapp.post.requestBeans.Phone;
 import com.github.bewithforce.riderapp.post.requestBeans.Stat;
 import com.github.bewithforce.riderapp.post.requestBeans.ReceivedStatus;
 import com.github.bewithforce.riderapp.post.requestBeans.StatusToSend;
@@ -47,4 +48,6 @@ public interface CallAPI {
     @POST("order/{id}/arrivedtocustomer")
     Call<Void> arrivedToCustomer(@Header("authorization")String token, @Path("id") int orderId);
 
+    @GET("info")
+    Call<Phone> getPhone(@Header("authorization")String token);
 }

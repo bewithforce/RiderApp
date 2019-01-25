@@ -82,14 +82,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonLogin"
         android:background="@drawable/button_register"/>
-
-    <TextView
-        android:id="@+id/textViewFail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="129dp"
-        android:layout_marginTop="72dp"
-        android:text="@string/sign_in_troubles"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonRegister" />
 </android.support.constraint.ConstraintLayout>

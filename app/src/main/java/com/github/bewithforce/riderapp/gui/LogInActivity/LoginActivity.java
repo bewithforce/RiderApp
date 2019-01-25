@@ -33,7 +33,6 @@ public class LoginActivity extends AppCompatActivity {
 
         Button buttonLogin = findViewById(R.id.buttonLogin);
         Button buttonRegister = findViewById(R.id.buttonRegister);
-        TextView textViewFail = findViewById(R.id.textViewFail);
         EditText loginInput = findViewById(R.id.login_text);
         EditText passwordInput = findViewById(R.id.password_text);
         TextInputLayout loginLayout = findViewById(R.id.passwordInputLayout);
@@ -106,11 +105,7 @@ public class LoginActivity extends AppCompatActivity {
             buttonLogin.setClickable(true);
         });
         buttonRegister.setOnClickListener((e) -> {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
-            startActivity(browserIntent);
-        });
-        textViewFail.setOnClickListener((e) -> {
-            Intent browserIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "80291111111"));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://foodtech.by/rabota/courier"));
             startActivity(browserIntent);
         });
     }
