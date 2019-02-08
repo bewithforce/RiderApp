@@ -63,7 +63,7 @@ public class OrderTableAdapter extends BaseAdapter implements ListAdapter {
         }
         holder.number.setText(Integer.toHexString(position + 1));
         holder.dish.setText(list.get(position).getName());
-        holder.amount.setText(list.get(position).getCount());
+        holder.amount.setText(Integer.toString(list.get(position).getCount()));
         view.setTag(holder);
         return view;
     }

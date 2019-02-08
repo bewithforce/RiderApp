@@ -1,28 +1,22 @@
 package com.github.bewithforce.riderapp.adapters;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.github.bewithforce.riderapp.R;
-import com.github.bewithforce.riderapp.gui.fragments.OrderFragment;
 import com.github.bewithforce.riderapp.post.requestBeans.Order;
 
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 
 public class OrdersListAdapter extends BaseAdapter implements ListAdapter {
 
@@ -31,7 +25,6 @@ public class OrdersListAdapter extends BaseAdapter implements ListAdapter {
         private TextView time;
         private TextView address;
         private TextView status;
-        private Button details;
     }
 
     private List<Order> list;
@@ -64,38 +57,27 @@ public class OrdersListAdapter extends BaseAdapter implements ListAdapter {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewHolder holder;
         View view = convertView;
-        if(view == null){
+        if (view == null) {
             view = inflater.inflate(R.layout.orders_list_element, parent, false);
             holder = new ViewHolder();
             holder.number = view.findViewById(R.id.order_number_orders_fragment);
             holder.address = view.findViewById(R.id.address_orders_fragment);
             holder.time = view.findViewById(R.id.waiting_time_orders_fragment);
             holder.status = view.findViewById(R.id.order_status_orders_fragment);
-            holder.details = view.findViewById(R.id.details_orders_fragment);
-        }else {
-            holder = (ViewHolder)view.getTag();
+        } else {
+            holder = (ViewHolder) view.getTag();
         }
         int status = list.get(position).getStatus();
         holder.number.setText("№" + String.valueOf(list.get(position).getId()));
-        holder.details.setOnClickListener(e->{
-            OrderFragment orderFragment = new OrderFragment();
-            Bundle arguments = new Bundle();
-            arguments.putString("order_number", String.valueOf(list.get(position).getId()));
-            orderFragment.setArguments(arguments);
-            ((AppCompatActivity)context).getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.base_fragment, orderFragment)
-                    .addToBackStack(null)
-                    .commit();
-        });
-
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
         Date now = Calendar.getInstance().getTime();
         StringBuilder time = new StringBuilder();
         long diff, minutes, hours;
         Date date;
         switch (status) {
-            case 0: case 2: case 3:
+            case 0:
+            case 2:
+            case 3:
                 holder.status.setText("Ресторан");
                 holder.address.setText(list.get(position).getRestaurant_address());
 
@@ -107,7 +89,9 @@ public class OrdersListAdapter extends BaseAdapter implements ListAdapter {
                     return view;
                 }
                 break;
-            case 1: case 4: case 5:
+            case 1:
+            case 4:
+            case 5:
                 holder.address.setText(list.get(position).getDelivery_address());
                 holder.status.setText("Клиент");
                 try {
@@ -123,32 +107,35 @@ public class OrdersListAdapter extends BaseAdapter implements ListAdapter {
                 return view;
         }
         diff = date.getTime() - now.getTime();
-        hours = diff/(1000*60*60) % 24;
-        minutes = diff/(1000*60) % 60;
-        if(hours != 0){
-            time.append(hours);
-            if(hours == 1){
-                time.append(" час ");
-            } else if(hours >= 5){
-                time.append(" часов ");
-            } else {
-                time.append(" часа ");
+        hours = diff / (1000 * 60 * 60) % 24;
+        minutes = diff / (1000 * 60) % 60;
+        if (diff > 0) {
+            if (hours != 0) {
+                time.append(hours);
+                if (hours == 1) {
+                    time.append(" час ");
+                } else if (hours >= 5) {
+                    time.append(" часов ");
+                } else {
+                    time.append(" часа ");
+                }
             }
-        }
-        if(minutes != 0){
-            time.append(minutes);
-            if(minutes == 1){
-                time.append(" минута");
-            } else if(minutes < 5){
-                time.append(" минуты");
+            if (minutes != 0) {
+                time.append(minutes);
+                if (minutes == 1) {
+                    time.append(" минута");
+                } else if (minutes < 5) {
+                    time.append(" минуты");
+                } else {
+                    time.append(" минут");
+                }
             } else {
-                time.append(" минут");
+                time.append("<1 минуты");
             }
         } else {
             time.append("<1 минуты");
         }
         holder.time.setText(time);
-
         view.setTag(holder);
         return view;
     }

@@ -13,7 +13,7 @@
 
     <string name="stats_title">Информация о смене</string>
     <string name="stats_orders_completed">Заказов за смену:</string>
-    <string name="stats_cash_received">Заработано денег:</string>
+    <string name="stats_cash_received">Получено наличных:</string>
 
     <string name="order_waiting">Заказ ожидается</string>
     <string name="more_info">Подробнее</string>

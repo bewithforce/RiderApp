@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.github.bewithforce.riderapp.R;
 import com.github.bewithforce.riderapp.gui.BaseActivity;

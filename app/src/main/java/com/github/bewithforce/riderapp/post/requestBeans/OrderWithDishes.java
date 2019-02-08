@@ -3,17 +3,17 @@ package com.github.bewithforce.riderapp.post.requestBeans;
 import java.util.List;
 
 public class OrderWithDishes {
-    private int id;
-    private int status;
-    private double delivery_longitude;
-    private double delivery_latitude;
+    private Integer id;
+    private Integer status;
+    private Double delivery_longitude;
+    private Double delivery_latitude;
     private String delivery_address;
     private String restaurant_arrival_time;
-    private double full_order_sum;
-    private double order_sum;
+    private Double full_order_sum;
+    private Double order_sum;
     private String customer_arrival_time;
-    private double restaurant_longitude;
-    private double restaurant_latitude;
+    private Double restaurant_longitude;
+    private Double restaurant_latitude;
     private String restaurant_address;
     private String restaurant_comment;
     private String restaurant_phone = null;
@@ -24,19 +24,19 @@ public class OrderWithDishes {
         return dishes;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public double getDelivery_longitude() {
+    public Double getDelivery_longitude() {
         return delivery_longitude;
     }
 
-    public double getDelivery_latitude() {
+    public Double getDelivery_latitude() {
         return delivery_latitude;
     }
 
@@ -48,11 +48,11 @@ public class OrderWithDishes {
         return restaurant_arrival_time;
     }
 
-    public double getFull_order_sum() {
+    public Double getFull_order_sum() {
         return full_order_sum;
     }
 
-    public double getOrder_sum() {
+    public Double getOrder_sum() {
         return order_sum;
     }
 
@@ -60,11 +60,11 @@ public class OrderWithDishes {
         return customer_arrival_time;
     }
 
-    public double getRestaurant_longitude() {
+    public Double getRestaurant_longitude() {
         return restaurant_longitude;
     }
 
-    public double getRestaurant_latitude() {
+    public Double getRestaurant_latitude() {
         return restaurant_latitude;
     }
 
@@ -88,19 +88,19 @@ public class OrderWithDishes {
 
     // Setter Methods
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
-    public void setDelivery_longitude(double delivery_longitude) {
+    public void setDelivery_longitude(Double delivery_longitude) {
         this.delivery_longitude = delivery_longitude;
     }
 
-    public void setDelivery_latitude(double delivery_latitude) {
+    public void setDelivery_latitude(Double delivery_latitude) {
         this.delivery_latitude = delivery_latitude;
     }
 
@@ -112,11 +112,11 @@ public class OrderWithDishes {
         this.restaurant_arrival_time = restaurant_arrival_time;
     }
 
-    public void setFull_order_sum(double full_order_sum) {
+    public void setFull_order_sum(Double full_order_sum) {
         this.full_order_sum = full_order_sum;
     }
 
-    public void setOrder_sum(double order_sum) {
+    public void setOrder_sum(Double order_sum) {
         this.order_sum = order_sum;
     }
 
@@ -124,11 +124,11 @@ public class OrderWithDishes {
         this.customer_arrival_time = customer_arrival_time;
     }
 
-    public void setRestaurant_longitude(double restaurant_longitude) {
+    public void setRestaurant_longitude(Double restaurant_longitude) {
         this.restaurant_longitude = restaurant_longitude;
     }
 
-    public void setRestaurant_latitude(double restaurant_latitude) {
+    public void setRestaurant_latitude(Double restaurant_latitude) {
         this.restaurant_latitude = restaurant_latitude;
     }
 

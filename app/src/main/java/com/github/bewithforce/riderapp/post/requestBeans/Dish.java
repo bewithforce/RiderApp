@@ -10,7 +10,7 @@ public class Dish {
     private String name;
     @SerializedName("count")
     @Expose
-    private String count;
+    private int count;
 
     public String getName() {
         return name;
@@ -20,11 +20,11 @@ public class Dish {
         this.name = name;
     }
 
-    public String getCount() {
+    public int getCount() {
         return count;
     }
 
-    public void setCount(String count) {
+    public void setCount(int count) {
         this.count = count;
     }
 

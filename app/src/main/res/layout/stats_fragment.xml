@@ -8,10 +8,13 @@
 
     <TextView
         android:id="@+id/stats_title_textView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="111dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginTop="11dp"
+        android:gravity="center"
+        android:background="@drawable/drawable_rectangle_fill_yellow"
         android:text="@string/stats_title"
         android:textColor="#232F34"
         android:textSize="20sp"

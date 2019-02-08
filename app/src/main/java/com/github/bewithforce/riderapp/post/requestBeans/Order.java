@@ -1,6 +1,8 @@
 package com.github.bewithforce.riderapp.post.requestBeans;
 
-public class Order {
+import java.io.Serializable;
+
+public class Order implements Serializable {
     private int id;
     private int status;
     private double delivery_longitude;

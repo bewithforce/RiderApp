@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ListFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.github.bewithforce.riderapp.R;
 import com.github.bewithforce.riderapp.adapters.OrdersListAdapter;
@@ -19,6 +19,11 @@ import com.github.bewithforce.riderapp.post.CallAPI;
 import com.github.bewithforce.riderapp.post.requestBeans.Order;
 import com.github.bewithforce.riderapp.tools.SessionTools;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -27,7 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class OrdersFragment extends ListFragment {
+public class OrdersFragment extends ListFragment implements AdapterView.OnItemClickListener {
     private View mView;
     private CallAPI callAPI;
     private Timer timer;
@@ -49,6 +54,17 @@ public class OrdersFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         callAPI = APIClient.getClient().create(CallAPI.class);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        List<Order>orders = readFromFile();
+        if(orders != null) {
+            OrdersListAdapter adapter = new OrdersListAdapter(orders, mView.getContext());
+            getListView().setAdapter(adapter);
+            getListView().setOnItemClickListener(OrdersFragment.this);
+        }
     }
 
     @Override
@@ -79,6 +95,8 @@ public class OrdersFragment extends ListFragment {
                                         List<Order> orders = response.body();
                                         OrdersListAdapter adapter = new OrdersListAdapter(orders, mView.getContext());
                                         getListView().setAdapter(adapter);
+                                        getListView().setOnItemClickListener(OrdersFragment.this);
+                                        writeToFile(response);
                                     } catch (Exception e) {
                                         Log.e("veeeeCallOrdersBodyFail", e.getMessage());
                                     }
@@ -105,10 +123,52 @@ public class OrdersFragment extends ListFragment {
         timer.schedule(task, 1, 10000);
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        OrderFragment orderFragment = new OrderFragment();
+        Bundle arguments = new Bundle();
+        arguments.putString("order_number", String.valueOf(id));
+        orderFragment.setArguments(arguments);
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.base_fragment, orderFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
     private void stopTimer() {
         if (timer != null) {
             timer.cancel();
             timer.purge();
+        }
+    }
+
+    private void writeToFile(Response<List<Order>> response){
+        try {
+            FileOutputStream fos = getContext().openFileOutput("config.txt", Context.MODE_PRIVATE);
+            ObjectOutputStream out = new ObjectOutputStream(fos);
+            out.writeObject(response.body());
+            out.close();
+            fos.close();
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+    }
+
+    private List<Order> readFromFile(){
+        try {
+            FileInputStream fis = getContext().openFileInput("config.txt");
+            ObjectInputStream is = new ObjectInputStream(fis);
+            List<Order> list = (List<Order>)is.readObject();
+            is.close();
+            fis.close();
+            Log.e("list size", String.valueOf(list.size()));
+            return list;
+        }
+        catch (Exception e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+            return null;
         }
     }
 }

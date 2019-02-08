@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -92,7 +93,10 @@ public class OrderFragment extends Fragment {
             smallCall.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> litCall, Response<Void> response) {
-                    customer.setClickable(false);
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.base_fragment, new OrdersFragment())
+                            .commit();
                 }
 
                 @Override
@@ -130,7 +134,6 @@ public class OrderFragment extends Fragment {
                     case 200:
                         try {
                             OrderWithDishes orderWithDishes = response.body();
-
                             switch (orderWithDishes.getStatus()) {
                                 case 0:
                                 case 2:
@@ -158,46 +161,62 @@ public class OrderFragment extends Fragment {
                             TextView restaurant_address = getView().findViewById(R.id.address1Order);
                             restaurant_address.setText(orderWithDishes.getRestaurant_address());
 
-                            Date restaurant_date = format.parse(orderWithDishes.getRestaurant_arrival_time());
-                            TextView restaurant_time = getView().findViewById(R.id.arrivalTime1Order);
-                            restaurant_time.setText(createBeautifulDate.format(restaurant_date));
+                            if (orderWithDishes.getRestaurant_arrival_time() != null) {
+                                Date restaurant_date = format.parse(orderWithDishes.getRestaurant_arrival_time());
+                                TextView restaurant_time = getView().findViewById(R.id.arrivalTime1Order);
+                                restaurant_time.setText(createBeautifulDate.format(restaurant_date));
+                            }
 
                             TextView restaurant_phone = getView().findViewById(R.id.phone1Order);
                             if (orderWithDishes.getRestaurant_phone() != null) {
-                                StringBuilder builder = new StringBuilder();
-                                if (orderWithDishes.getRestaurant_phone().charAt(0) != '+') {
-                                    builder.append('+');
+                                if (orderWithDishes.getRestaurant_phone().length() != 0) {
+                                    StringBuilder builder = new StringBuilder();
+                                    if (orderWithDishes.getRestaurant_phone().charAt(0) != '+') {
+                                        builder.append('+');
+                                    }
+                                    builder.append(orderWithDishes.getRestaurant_phone());
+                                    restaurant_phone.setText(builder.toString());
                                 }
-                                builder.append(orderWithDishes.getRestaurant_phone());
-                                restaurant_phone.setText(builder.toString());
                             } else {
                                 restaurant_phone.setText(orderWithDishes.getRestaurant_phone());
                             }
 
                             TextView restaurant_price = getView().findViewById(R.id.price_order);
-                            restaurant_price.setText(Double.toString(orderWithDishes.getFull_order_sum()) + " BYN");
+                            if (orderWithDishes.getOrder_sum() != null) {
+                                restaurant_price.setText(Double.toString(orderWithDishes.getOrder_sum()) + " BYN");
+                            } else {
+                                restaurant_price.setText("0 BYN");
+                            }
 
                             TextView customer_address = getView().findViewById(R.id.address2Order);
                             customer_address.setText(orderWithDishes.getDelivery_address());
 
                             TextView customer_phone = getView().findViewById(R.id.phone2Order);
                             if (orderWithDishes.getCustomer_phone() != null) {
-                                StringBuilder builder = new StringBuilder();
-                                if (orderWithDishes.getCustomer_phone().charAt(0) != '+') {
-                                    builder.append('+');
+                                if (orderWithDishes.getCustomer_phone().length() != 0) {
+                                    StringBuilder builder = new StringBuilder();
+                                    if (orderWithDishes.getCustomer_phone().charAt(0) != '+') {
+                                        builder.append('+');
+                                    }
+                                    builder.append(orderWithDishes.getCustomer_phone());
+                                    customer_phone.setText(builder.toString());
                                 }
-                                builder.append(orderWithDishes.getCustomer_phone());
-                                customer_phone.setText(builder.toString());
                             } else {
                                 customer_phone.setText(orderWithDishes.getCustomer_phone());
                             }
 
-                            Date customer_date = format.parse(orderWithDishes.getCustomer_arrival_time());
-                            TextView customer_time = getView().findViewById(R.id.arrivalTime2Order);
-                            customer_time.setText(createBeautifulDate.format(customer_date));
+                            if (orderWithDishes.getCustomer_arrival_time() != null) {
+                                Date customer_date = format.parse(orderWithDishes.getCustomer_arrival_time());
+                                TextView customer_time = getView().findViewById(R.id.arrivalTime2Order);
+                                customer_time.setText(createBeautifulDate.format(customer_date));
+                            }
 
                             TextView customer_price = getView().findViewById(R.id.to_pay);
-                            customer_price.setText(Double.toString(orderWithDishes.getOrder_sum()) + " BYN");
+                            if(orderWithDishes.getFull_order_sum() != null) {
+                                customer_price.setText(Double.toString(orderWithDishes.getFull_order_sum()) + " BYN");
+                            } else {
+                                customer_price.setText("0 BYN");
+                            }
 
                             View includedView = getView().findViewById(R.id.table_of_dishes);
                             OrderTableAdapter adapter = new OrderTableAdapter(orderWithDishes.getDishes(),
@@ -208,16 +227,25 @@ public class OrderFragment extends Fragment {
                             mRecycler.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                                 @Override
                                 public void onGlobalLayout() {
-                                    ConstraintLayout layout = includedView.findViewById(R.id.constraintLayout);
-                                    view.setLayoutParams(new ConstraintLayout.LayoutParams(view.getWidth(),
-                                            mRecycler.getMeasuredHeightAndState() + 75));
+                                    int height = 60;
+                                    for(int i = 0; i < mRecycler.getCount(); i++){
+                                        View view  = mRecycler.getChildAt(i);
+                                        if(view != null) {
+                                            height += view.getHeight();
+                                        } else {
+                                            height += adapter.getView(i, view, mRecycler).getHeight();
+                                        }
+                                    }
+                                    height += mRecycler.getDividerHeight() * (mRecycler.getCount() - 1);
+                                    view.setLayoutParams(new ConstraintLayout.LayoutParams(view.getWidth(), height));
                                     getView().requestLayout();
-                                    Log.e("asdasdasd", Integer.toString(mRecycler.getMeasuredHeightAndState() + layout.getHeight()));
+                                    Log.e("asdasdasd", String.valueOf(height));
                                     mRecycler.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                                 }
                             });
                         } catch (Exception e) {
-                            Log.e("veeeeOrderFragmentFail", e.getLocalizedMessage());
+                            Log.e("veeeeOrderFragmentFail", Log.getStackTraceString(e));
+
                         }
                         break;
                     case 401:
