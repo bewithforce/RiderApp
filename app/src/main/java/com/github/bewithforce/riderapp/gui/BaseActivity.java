@@ -2,6 +2,9 @@ package com.github.bewithforce.riderapp.gui;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -17,6 +20,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,6 +34,8 @@ import com.github.bewithforce.riderapp.post.requestBeans.CourierLocation;
 import com.github.bewithforce.riderapp.R;
 import com.github.bewithforce.riderapp.gui.fragments.OrdersFragment;
 import com.github.bewithforce.riderapp.gui.fragments.StatsFragment;
+import com.github.bewithforce.riderapp.post.requestBeans.Order;
+import com.github.bewithforce.riderapp.tools.FileTools;
 import com.github.bewithforce.riderapp.tools.LocationTools;
 import com.github.bewithforce.riderapp.tools.SessionTools;
 import com.google.android.gms.common.api.ApiException;
@@ -42,6 +48,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.Task;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -51,8 +58,13 @@ import retrofit2.Response;
 
 public class BaseActivity extends AppCompatActivity {
 
-    private Timer timer;
-    private TimerTask task;
+    private Timer locationTimer;
+    private TimerTask locationTask;
+    private Timer ordersTimer;
+    private TimerTask ordersTask;
+    private List<Order> oldOrders;
+    private static boolean activityVisible;
+
     private CallAPI callAPI;
     private String token;
     private Handler mTimerHandler = new Handler();
@@ -74,6 +86,7 @@ public class BaseActivity extends AppCompatActivity {
                     .findFragmentById(R.id.base_fragment);
             switch (item.getItemId()) {
                 case R.id.action_orders:
+                    startOrdersTimer();
                     if (!(fragmentInFrame instanceof OrdersFragment)) {
                         getSupportFragmentManager().popBackStack();
                         getSupportFragmentManager()
@@ -83,6 +96,7 @@ public class BaseActivity extends AppCompatActivity {
                     }
                     return true;
                 case R.id.action_stats:
+                    stopTimer(ordersTimer);
                     if (!(fragmentInFrame instanceof StatsFragment)) {
                         getSupportFragmentManager().popBackStack();
                         getSupportFragmentManager()
@@ -107,8 +121,59 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        activityVisible = true;
         if (checkIfAlreadyHavePermission()) {
             start();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        activityVisible = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopTimer(locationTimer);
+        stopTimer(ordersTimer);
+        mLocationManager.removeUpdates(mLocationListener);
+    }
+
+    private boolean checkIfAlreadyHavePermission() {
+        int result = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 7:
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    finish();
+                } else {
+                    start();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 911) {
+            if (resultCode == Activity.RESULT_OK) {
+                if(mLocationManager == null) {
+                    foundMeOnTheEarth();
+                    startLocationTimer();
+                }
+            } else {
+                Toast.makeText(this, "включите GPS", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -126,7 +191,7 @@ public class BaseActivity extends AppCompatActivity {
                 task.getResult(ApiException.class);
                 if (mLocationManager == null) {
                     foundMeOnTheEarth();
-                    startTimer();
+                    startLocationTimer();
                 }
             } catch (ApiException ex) {
                 switch (ex.getStatusCode()) {
@@ -147,17 +212,17 @@ public class BaseActivity extends AppCompatActivity {
                     default:
                         if (mLocationManager == null) {
                             foundMeOnTheEarth();
-                            startTimer();
+                            startLocationTimer();
                         }
                 }
             }
         });
     }
 
-    private void startTimer() {
-        if(timer == null) {
-            timer = new Timer();
-            task = new TimerTask() {
+    private void startLocationTimer() {
+        if(locationTimer == null) {
+            locationTimer = new Timer();
+            locationTask = new TimerTask() {
                 @Override
                 public void run() {
                     mTimerHandler.post(() -> {
@@ -192,12 +257,82 @@ public class BaseActivity extends AppCompatActivity {
                     });
                 }
             };
-            timer.schedule(task, 1, 30000);
+            locationTimer.schedule(locationTask, 1, 30000);
         }
     }
 
+    private void startOrdersTimer() {
+        stopTimer(ordersTimer);
+        ordersTimer = new Timer();
+        ordersTask = new TimerTask() {
+            @Override
+            public void run() {
+                mTimerHandler.post(() -> {
+                    Call<List<Order>> call = callAPI.getOrders(token);
+                    call.enqueue(new Callback<List<Order>>() {
+                        @Override
+                        public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
+                            switch (response.code()) {
+                                case 200:
+                                    try {
+                                        List<Order> orders = response.body();
+                                        if (oldOrders == null) {
+                                            oldOrders = FileTools.readFromFile(BaseActivity.this);
+                                        }
+                                        if (!orders.equals(oldOrders)) {
+                                            FileTools.writeToFile(response, BaseActivity.this);
+                                            oldOrders = orders;
+                                            if (!activityVisible) {
+                                                showNotification("новый заказ", "сменилась точка назначения");
+                                            }
+                                        }
+                                    } catch (Exception e) {
+                                        Log.e("veeeeCallOrdersBodyFail", e.getMessage());
+                                    }
+                                    break;
+                                case 401:
+                                    SessionTools.removeToken(getBaseContext());
+                                    Intent intent = new Intent(BaseActivity.this, LoginActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                            }
+                        }
 
-    private void stopTimer() {
+                        @Override
+                        public void onFailure(Call<List<Order>> call, Throwable t) {
+                            Log.e("veeeeCallOrdersFail", t.getLocalizedMessage());
+
+                            call.cancel();
+                        }
+                    });
+                });
+            }
+        };
+        ordersTimer.schedule(ordersTask, 1, 10000);
+    }
+
+    void showNotification(String title, String content) {
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("default",
+                    "YOUR_CHANNEL_NAME",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("YOUR_NOTIFICATION_CHANNEL_DISCRIPTION");
+            mNotificationManager.createNotificationChannel(channel);
+        }
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "default")
+                .setSmallIcon(R.mipmap.ic_launcher) // notification icon
+                .setContentTitle(title) // title for notification
+                .setContentText(content)// message for notification
+                .setAutoCancel(true); // clear notification after click
+        Intent intent = new Intent(getApplicationContext(), BaseActivity.class);
+        PendingIntent pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(pi);
+        mNotificationManager.notify(0, mBuilder.build());
+    }
+
+    private void stopTimer(Timer timer) {
         if (timer != null) {
             timer.cancel();
             timer.purge();
@@ -224,48 +359,5 @@ public class BaseActivity extends AppCompatActivity {
             }
         };
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,30000,50,mLocationListener);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        stopTimer();
-        mLocationManager.removeUpdates(mLocationListener);
-    }
-
-    private boolean checkIfAlreadyHavePermission() {
-        int result = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        return result == PackageManager.PERMISSION_GRANTED;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 7:
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    finish();
-                } else {
-                    start();
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 911) {
-            if (resultCode == Activity.RESULT_OK) {
-                if(mLocationManager == null) {
-                    foundMeOnTheEarth();
-                    startTimer();
-                }
-            } else {
-                Toast.makeText(this, "включите GPS", Toast.LENGTH_LONG).show();
-            }
-        }
     }
 }

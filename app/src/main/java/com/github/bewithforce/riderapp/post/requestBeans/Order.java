@@ -1,6 +1,7 @@
 package com.github.bewithforce.riderapp.post.requestBeans;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Order implements Serializable {
     private int id;
@@ -94,5 +95,27 @@ public class Order implements Serializable {
 
     public void setRestaurant_address(String restaurant_address) {
         this.restaurant_address = restaurant_address;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return id == order.id &&
+                status == order.status &&
+                Double.compare(order.delivery_longitude, delivery_longitude) == 0 &&
+                Double.compare(order.delivery_latitude, delivery_latitude) == 0 &&
+                Double.compare(order.restaurant_longitude, restaurant_longitude) == 0 &&
+                Double.compare(order.restaurant_latitude, restaurant_latitude) == 0 &&
+                Objects.equals(delivery_address, order.delivery_address) &&
+                Objects.equals(restaurant_arrival_time, order.restaurant_arrival_time) &&
+                Objects.equals(customer_arrival_time, order.customer_arrival_time) &&
+                Objects.equals(restaurant_address, order.restaurant_address);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, status, delivery_longitude, delivery_latitude, delivery_address, restaurant_arrival_time, customer_arrival_time, restaurant_longitude, restaurant_latitude, restaurant_address);
     }
 }

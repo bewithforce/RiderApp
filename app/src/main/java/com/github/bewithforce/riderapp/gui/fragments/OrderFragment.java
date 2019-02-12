@@ -2,6 +2,8 @@ package com.github.bewithforce.riderapp.gui.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -21,10 +23,13 @@ import com.github.bewithforce.riderapp.adapters.OrderTableAdapter;
 import com.github.bewithforce.riderapp.gui.LogInActivity.LoginActivity;
 import com.github.bewithforce.riderapp.post.APIClient;
 import com.github.bewithforce.riderapp.post.CallAPI;
+import com.github.bewithforce.riderapp.post.requestBeans.CourierLocation;
 import com.github.bewithforce.riderapp.post.requestBeans.Dish;
 import com.github.bewithforce.riderapp.post.requestBeans.OrderWithDishes;
 import com.github.bewithforce.riderapp.post.requestBeans.Phone;
+import com.github.bewithforce.riderapp.tools.LocationTools;
 import com.github.bewithforce.riderapp.tools.SessionTools;
+import com.google.android.gms.location.LocationServices;
 
 
 import java.text.SimpleDateFormat;
@@ -78,7 +83,9 @@ public class OrderFragment extends Fragment {
             smallCall.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> litCall, Response<Void> response) {
+                    restaurant.setVisibility(View.INVISIBLE);
                     restaurant.setClickable(false);
+                    customer.setVisibility(View.VISIBLE);
                     customer.setClickable(true);
                 }
 
@@ -138,13 +145,13 @@ public class OrderFragment extends Fragment {
                                 case 0:
                                 case 2:
                                 case 3:
+                                    restaurant.setVisibility(View.VISIBLE);
                                     restaurant.setClickable(true);
-                                    customer.setClickable(false);
                                     break;
                                 case 1:
                                 case 4:
                                 case 5:
-                                    restaurant.setClickable(false);
+                                    customer.setVisibility(View.VISIBLE);
                                     customer.setClickable(true);
                                     break;
                             }
@@ -160,6 +167,32 @@ public class OrderFragment extends Fragment {
 
                             TextView restaurant_address = getView().findViewById(R.id.address1Order);
                             restaurant_address.setText(orderWithDishes.getRestaurant_address());
+                            restaurant_address.setOnClickListener(e->{
+                                StringBuilder line = new StringBuilder("yandexnavi://build_route_on_map");
+                                CourierLocation location =  LocationTools.getToken(mView.getContext());
+                                line.append("?lat_from=")
+                                        .append(location.getLatitude())
+                                        .append("&lon_from=")
+                                        .append(location.getLongitude())
+                                        .append("&lat_to=")
+                                        .append(orderWithDishes.getRestaurant_latitude())
+                                        .append("&lon_to=")
+                                        .append(orderWithDishes.getRestaurant_longitude());
+                                Uri uri = Uri.parse(line.toString());
+                                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                                intent.setPackage("ru.yandex.yandexnavi");
+                                PackageManager packageManager = getActivity().getPackageManager();
+                                List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
+                                boolean isIntentSafe = activities.size() > 0;
+                                if (isIntentSafe) {
+                                    startActivity(intent);
+                                } else {
+
+                                    intent = new Intent(Intent.ACTION_VIEW);
+                                    intent.setData(Uri.parse("market://details?id=ru.yandex.yandexnavi"));
+                                    startActivity(intent);
+                                }
+                            });
 
                             if (orderWithDishes.getRestaurant_arrival_time() != null) {
                                 Date restaurant_date = format.parse(orderWithDishes.getRestaurant_arrival_time());
@@ -239,7 +272,6 @@ public class OrderFragment extends Fragment {
                                     height += mRecycler.getDividerHeight() * (mRecycler.getCount() - 1);
                                     view.setLayoutParams(new ConstraintLayout.LayoutParams(view.getWidth(), height));
                                     getView().requestLayout();
-                                    Log.e("asdasdasd", String.valueOf(height));
                                     mRecycler.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                                 }
                             });

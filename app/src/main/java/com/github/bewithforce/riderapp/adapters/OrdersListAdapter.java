@@ -72,8 +72,9 @@ public class OrdersListAdapter extends BaseAdapter implements ListAdapter {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
         Date now = Calendar.getInstance().getTime();
         StringBuilder time = new StringBuilder();
-        long diff, minutes, hours;
-        Date date;
+        long diff = 0, minutes, hours;
+        Date date = null;
+        boolean fail = false;
         switch (status) {
             case 0:
             case 2:
@@ -85,8 +86,7 @@ public class OrdersListAdapter extends BaseAdapter implements ListAdapter {
                     date = format.parse(list.get(position).getRestaurant_arrival_time());
                 } catch (Exception e) {
                     Log.e("veeeeListAdapter", e.getMessage());
-                    view.setTag(holder);
-                    return view;
+                    fail = true;
                 }
                 break;
             case 1:
@@ -98,44 +98,45 @@ public class OrdersListAdapter extends BaseAdapter implements ListAdapter {
                     date = format.parse(list.get(position).getCustomer_arrival_time());
                 } catch (Exception e) {
                     Log.e("veeeeListAdapter", e.getMessage());
-                    view.setTag(holder);
-                    return view;
+                    fail = true;
                 }
                 break;
             default:
                 view.setTag(holder);
                 return view;
         }
-        diff = date.getTime() - now.getTime();
-        hours = diff / (1000 * 60 * 60) % 24;
-        minutes = diff / (1000 * 60) % 60;
-        if (diff > 0) {
-            if (hours != 0) {
-                time.append(hours);
-                if (hours == 1) {
-                    time.append(" час ");
-                } else if (hours >= 5) {
-                    time.append(" часов ");
-                } else {
-                    time.append(" часа ");
+        if(!fail) {
+            diff = date.getTime() - now.getTime();
+            hours = diff / (1000 * 60 * 60) % 24;
+            minutes = diff / (1000 * 60) % 60;
+            if (diff > 0) {
+                if (hours != 0) {
+                    time.append(hours);
+                    if (hours == 1) {
+                        time.append(" час ");
+                    } else if (hours >= 5) {
+                        time.append(" часов ");
+                    } else {
+                        time.append(" часа ");
+                    }
                 }
-            }
-            if (minutes != 0) {
-                time.append(minutes);
-                if (minutes == 1) {
-                    time.append(" минута");
-                } else if (minutes < 5) {
-                    time.append(" минуты");
+                if (minutes != 0) {
+                    time.append(minutes);
+                    if (minutes == 1) {
+                        time.append(" минута");
+                    } else if (minutes < 5) {
+                        time.append(" минуты");
+                    } else {
+                        time.append(" минут");
+                    }
                 } else {
-                    time.append(" минут");
+                    time.append("<1 минуты");
                 }
             } else {
                 time.append("<1 минуты");
             }
-        } else {
-            time.append("<1 минуты");
+            holder.time.setText(time);
         }
-        holder.time.setText(time);
         view.setTag(holder);
         return view;
     }
