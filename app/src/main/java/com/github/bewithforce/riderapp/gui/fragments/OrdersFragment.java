@@ -74,8 +74,10 @@ public class OrdersFragment extends ListFragment implements AdapterView.OnItemCl
                     oldOrders = FileTools.readFromFile(mView.getContext());
                     if (oldOrders != null) {
                         OrdersListAdapter adapter = new OrdersListAdapter(oldOrders, mView.getContext());
-                        getListView().setAdapter(adapter);
-                        getListView().setOnItemClickListener(OrdersFragment.this);
+                        try {
+                            getListView().setAdapter(adapter);
+                            getListView().setOnItemClickListener(OrdersFragment.this);
+                        } catch (Exception e){}
                     }
                 });
             }

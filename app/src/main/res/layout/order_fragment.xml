@@ -94,6 +94,9 @@
                 android:text="Адрес:"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="14sp"
+                android:singleLine="false"
+                android:minLines="2"
+                android:scrollHorizontally="false"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 

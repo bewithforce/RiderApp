@@ -47,6 +47,7 @@ import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.Task;
+import com.kinda.alert.KAlertDialog;
 
 import java.util.List;
 import java.util.Timer;
@@ -106,10 +107,19 @@ public class BaseActivity extends AppCompatActivity {
                     }
                     return true;
                 case R.id.action_exit:
-                    SessionTools.removeToken(this);
-                    Intent intent = new Intent(this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
+                    new KAlertDialog(this, KAlertDialog.WARNING_TYPE)
+                            .setTitleText("Вы точно хотите выйти?")
+                            .setCancelText("Отмена")
+                            .setConfirmText("Да, выйти")
+                            .showCancelButton(true)
+                            .setConfirmClickListener((dialog) -> {
+                                dialog.cancel();
+                                SessionTools.removeToken(this);
+                                Intent intent = new Intent(this, LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }).show();
+
                     return true;
             }
             return false;
