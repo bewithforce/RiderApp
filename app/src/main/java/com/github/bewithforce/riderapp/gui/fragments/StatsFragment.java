@@ -2,7 +2,9 @@ package com.github.bewithforce.riderapp.gui.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,6 +40,10 @@ public class StatsFragment extends Fragment {
         TextView orders_completed = getView().findViewById(R.id.orders_completed);
         CallAPI callAPI = APIClient.getClient().create(CallAPI.class);
         Switch swi = getActivity().findViewById(R.id.switch1);
+        try{
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
+            swi.setChecked(preferences.getBoolean("switchStats", false));
+        } catch (Exception e){}
 
         String token = SessionTools.getToken(getActivity().getBaseContext());
         Call<Stat> statCall = callAPI.getStatiscs(token);
@@ -55,8 +61,8 @@ public class StatsFragment extends Fragment {
                         }
                         break;
                     case 401:
-                        SessionTools.removeToken(getActivity().getBaseContext());
                         Context context = getActivity().getBaseContext();
+                        SessionTools.removeToken(context);
                         Intent intent = new Intent(context, LoginActivity.class);
                         context.startActivity(intent);
                         getActivity().finish();
@@ -78,13 +84,15 @@ public class StatsFragment extends Fragment {
                     case 200:
                         try {
                             ReceivedStatus stat = response.body();
-
+                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
                             if (stat != null) {
                                 Log.e("veeeeStatsCallBodyFail", Boolean.toString(stat.getStatus()));
                                 if (!stat.getStatus()) {
                                     swi.setChecked(false);
+                                    preferences.edit().putBoolean("switchStats", false).apply();
                                 } else {
                                     swi.setChecked(true);
+                                    preferences.edit().putBoolean("switchStats", true).apply();
                                 }
                             }
                         } catch (Exception e) {
