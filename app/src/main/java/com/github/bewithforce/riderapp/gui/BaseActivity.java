@@ -109,10 +109,10 @@ public class BaseActivity extends AppCompatActivity {
                 case R.id.action_exit:
                     new KAlertDialog(this, KAlertDialog.WARNING_TYPE)
                             .setTitleText("Вы точно хотите выйти?")
-                            .setCancelText("Отмена")
-                            .setConfirmText("Да, выйти")
+                            .setConfirmText("Отмена")
+                            .setCancelText("Да, выйти")
                             .showCancelButton(true)
-                            .setConfirmClickListener((dialog) -> {
+                            .setCancelClickListener((dialog) -> {
                                 dialog.cancel();
                                 SessionTools.removeToken(this);
                                 Intent intent = new Intent(this, LoginActivity.class);
@@ -271,7 +271,7 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    private void startOrdersTimer() {
+    public void startOrdersTimer() {
         stopTimer(ordersTimer);
         ordersTimer = new Timer();
         ordersTask = new TimerTask() {

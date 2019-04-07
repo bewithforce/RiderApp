@@ -3,6 +3,7 @@ package com.github.bewithforce.riderapp.gui.fragments;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.AdapterView;
 
 import com.github.bewithforce.riderapp.R;
 import com.github.bewithforce.riderapp.adapters.OrdersListAdapter;
+import com.github.bewithforce.riderapp.gui.BaseActivity;
 import com.github.bewithforce.riderapp.post.requestBeans.Order;
 import com.github.bewithforce.riderapp.tools.FileTools;
 
@@ -29,6 +31,12 @@ public class OrdersFragment extends ListFragment implements AdapterView.OnItemCl
         super.onCreateView(inflater, container, savedInstanceState);
         View temp = inflater.inflate(R.layout.orders_list_fragment, container, false);
         this.mView = temp;
+        try {
+            ((BaseActivity) getActivity()).startOrdersTimer();
+        }
+        catch (Exception e){
+            Log.e("ordersExceptionOnStart", e.getLocalizedMessage());
+        }
         startTimer();
         return temp;
     }
@@ -77,7 +85,9 @@ public class OrdersFragment extends ListFragment implements AdapterView.OnItemCl
                         try {
                             getListView().setAdapter(adapter);
                             getListView().setOnItemClickListener(OrdersFragment.this);
-                        } catch (Exception e){}
+                        } catch (Exception e) {
+                            Log.e("ordersExceptionInTimer", e.getLocalizedMessage());
+                        }
                     }
                 });
             }

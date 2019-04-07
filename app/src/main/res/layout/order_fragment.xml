@@ -306,14 +306,13 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="8dp"
-                android:background="@drawable/drawable_rectangle_fill_yellow"
+                android:background="@drawable/drawable_rectangle_fill_gray"
                 android:fontFamily="@font/open_sans_bold"
                 android:text="Заказ получен"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="14sp"
-                android:visibility="invisible"
                 android:clickable="false"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/arrivedClientOrder"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView22" />
 
@@ -324,15 +323,14 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="8dp"
-                android:background="@drawable/drawable_rectangle_fill_yellow"
+                android:background="@drawable/drawable_rectangle_fill_gray"
                 android:fontFamily="@font/open_sans_bold"
                 android:text="Передан клиенту"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="14sp"
-                android:visibility="invisible"
                 android:clickable="false"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/arrivedShopOrder"
                 app:layout_constraintTop_toBottomOf="@+id/textView22" />
 
             <Button

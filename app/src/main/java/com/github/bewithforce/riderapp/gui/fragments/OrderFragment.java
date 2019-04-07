@@ -83,9 +83,9 @@ public class OrderFragment extends Fragment {
             smallCall.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> litCall, Response<Void> response) {
-                    restaurant.setVisibility(View.INVISIBLE);
+                    restaurant.setBackground(getResources().getDrawable(R.drawable.drawable_rectangle_fill_gray));
                     restaurant.setClickable(false);
-                    customer.setVisibility(View.VISIBLE);
+                    customer.setBackground(getResources().getDrawable(R.drawable.drawable_rectangle_fill_yellow));
                     customer.setClickable(true);
                 }
 
@@ -145,13 +145,13 @@ public class OrderFragment extends Fragment {
                                 case 0:
                                 case 2:
                                 case 3:
-                                    restaurant.setVisibility(View.VISIBLE);
+                                    restaurant.setBackground(getResources().getDrawable(R.drawable.drawable_rectangle_fill_yellow));
                                     restaurant.setClickable(true);
                                     break;
                                 case 1:
                                 case 4:
                                 case 5:
-                                    customer.setVisibility(View.VISIBLE);
+                                    customer.setBackground(getResources().getDrawable(R.drawable.drawable_rectangle_fill_yellow));
                                     customer.setClickable(true);
                                     break;
                             }
@@ -216,7 +216,7 @@ public class OrderFragment extends Fragment {
 
                             TextView restaurant_price = getView().findViewById(R.id.price_order);
                             if (orderWithDishes.getOrder_sum() != null) {
-                                restaurant_price.setText(Double.toString(orderWithDishes.getOrder_sum()) + " BYN");
+                                restaurant_price.setText(Double.toString(orderWithDishes.getFull_order_sum()) + " BYN");
                             } else {
                                 restaurant_price.setText("0 BYN");
                             }
@@ -246,7 +246,7 @@ public class OrderFragment extends Fragment {
 
                             TextView customer_price = getView().findViewById(R.id.to_pay);
                             if(orderWithDishes.getFull_order_sum() != null) {
-                                customer_price.setText(Double.toString(orderWithDishes.getFull_order_sum()) + " BYN");
+                                customer_price.setText(Double.toString(orderWithDishes.getOrder_sum()) + " BYN");
                             } else {
                                 customer_price.setText("0 BYN");
                             }
