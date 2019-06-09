@@ -5,6 +5,7 @@ import java.util.List;
 public class OrderWithDishes {
     private Integer id;
     private Integer status;
+    private String restaurant_name;
     private Double delivery_longitude;
     private Double delivery_latitude;
     private String delivery_address;
@@ -18,6 +19,7 @@ public class OrderWithDishes {
     private String restaurant_comment;
     private String restaurant_phone = null;
     private String customer_phone;
+    private String Delivery_comment;
     private List<Dish> dishes;
 
     public List<Dish> getDishes() {
@@ -30,6 +32,10 @@ public class OrderWithDishes {
 
     public Integer getStatus() {
         return status;
+    }
+
+    public String getRestaurant_name() {
+        return restaurant_name;
     }
 
     public Double getDelivery_longitude() {
@@ -84,9 +90,11 @@ public class OrderWithDishes {
         return customer_phone;
     }
 
+    public String getDelivery_comment() {
+        return Delivery_comment;
+    }
 
-
-    // Setter Methods
+// Setter Methods
 
     public void setId(Integer id) {
         this.id = id;
@@ -94,6 +102,10 @@ public class OrderWithDishes {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public void setRestaurant_name(String restaurant_name) {
+        this.restaurant_name = restaurant_name;
     }
 
     public void setDelivery_longitude(Double delivery_longitude) {
@@ -146,6 +158,10 @@ public class OrderWithDishes {
 
     public void setCustomer_phone(String customer_phone) {
         this.customer_phone = customer_phone;
+    }
+
+    public void setDelivery_comment(String delivery_comment) {
+        Delivery_comment = delivery_comment;
     }
 
     public void setDishes(List<Dish> dishes) {

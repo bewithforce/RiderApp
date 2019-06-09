@@ -54,7 +54,7 @@ public class StatsFragment extends Fragment {
                     case 200:
                         try {
                             Stat stat = response.body();
-                            cash.setText(stat.getReceivedMoney().toString());
+                            cash.setText(String.format("%.2f BYN", stat.getReceivedMoney()));
                             orders_completed.setText(stat.getDeliveryOrders().toString());
                         } catch (Exception e) {
                             Log.e("veeeeStatsCallBodyFail", e.getLocalizedMessage());

@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,17 +23,13 @@ import com.github.bewithforce.riderapp.gui.LogInActivity.LoginActivity;
 import com.github.bewithforce.riderapp.post.APIClient;
 import com.github.bewithforce.riderapp.post.CallAPI;
 import com.github.bewithforce.riderapp.post.requestBeans.CourierLocation;
-import com.github.bewithforce.riderapp.post.requestBeans.Dish;
 import com.github.bewithforce.riderapp.post.requestBeans.OrderWithDishes;
 import com.github.bewithforce.riderapp.post.requestBeans.Phone;
 import com.github.bewithforce.riderapp.tools.LocationTools;
 import com.github.bewithforce.riderapp.tools.SessionTools;
-import com.google.android.gms.location.LocationServices;
 
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -72,6 +67,7 @@ public class OrderFragment extends Fragment {
         restaurant = getView().findViewById(R.id.arrivedShopOrder);
         customer = getView().findViewById(R.id.arrivedClientOrder);
         back = getView().findViewById(R.id.backButton);
+
 
         back.setOnClickListener(e -> getActivity().getSupportFragmentManager()
                 .beginTransaction()
@@ -139,8 +135,11 @@ public class OrderFragment extends Fragment {
             public void onResponse(Call<OrderWithDishes> call, Response<OrderWithDishes> response) {
                 switch (response.code()) {
                     case 200:
+                        OrderWithDishes orderWithDishes = response.body();
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
+                        SimpleDateFormat createBeautifulDate = new SimpleDateFormat("HH:mm", Locale.US);
+
                         try {
-                            OrderWithDishes orderWithDishes = response.body();
                             switch (orderWithDishes.getStatus()) {
                                 case 0:
                                 case 2:
@@ -155,21 +154,33 @@ public class OrderFragment extends Fragment {
                                     customer.setClickable(true);
                                     break;
                             }
+                        } catch (Exception e) {
+                            Log.e("veeeeOrderFragmentFail", Log.getStackTraceString(e));
 
-                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
-                            SimpleDateFormat createBeautifulDate = new SimpleDateFormat("HH:mm", Locale.US);
+                        }
 
+                        try {
                             TextView order_number = getView().findViewById(R.id.orderOrder);
                             order_number.setText("Заказ №" + orderWithDishes.getId());
+                        } catch (Exception e) {
+                            Log.e("veeeeOrderFragmentFail", Log.getStackTraceString(e));
 
+                        }
+
+                        try {
                             TextView restaurant = getView().findViewById(R.id.shopOrder);
-                            restaurant.setText("Название не приходит");
+                            restaurant.setText(orderWithDishes.getRestaurant_name());
+                        } catch (Exception e) {
+                            Log.e("veeeeOrderFragmentFail", Log.getStackTraceString(e));
 
+                        }
+
+                        try {
                             TextView restaurant_address = getView().findViewById(R.id.address1Order);
                             restaurant_address.setText(orderWithDishes.getRestaurant_address());
-                            restaurant_address.setOnClickListener(e->{
+                            restaurant_address.setOnClickListener(e -> {
                                 StringBuilder line = new StringBuilder("yandexnavi://build_route_on_map");
-                                CourierLocation location =  LocationTools.getToken(mView.getContext());
+                                CourierLocation location = LocationTools.getToken(mView.getContext());
                                 line.append("?lat_from=")
                                         .append(location.getLatitude())
                                         .append("&lon_from=")
@@ -193,13 +204,23 @@ public class OrderFragment extends Fragment {
                                     startActivity(intent);
                                 }
                             });
+                        } catch (Exception e) {
+                            Log.e("veeeeOrderFragmentFail", Log.getStackTraceString(e));
 
+                        }
+
+                        try {
                             if (orderWithDishes.getRestaurant_arrival_time() != null) {
                                 Date restaurant_date = format.parse(orderWithDishes.getRestaurant_arrival_time());
                                 TextView restaurant_time = getView().findViewById(R.id.arrivalTime1Order);
                                 restaurant_time.setText(createBeautifulDate.format(restaurant_date));
                             }
+                        } catch (Exception e) {
+                            Log.e("veeeeOrderFragmentFail", Log.getStackTraceString(e));
 
+                        }
+
+                        try {
                             TextView restaurant_phone = getView().findViewById(R.id.phone1Order);
                             if (orderWithDishes.getRestaurant_phone() != null) {
                                 if (orderWithDishes.getRestaurant_phone().length() != 0) {
@@ -209,21 +230,66 @@ public class OrderFragment extends Fragment {
                                     }
                                     builder.append(orderWithDishes.getRestaurant_phone());
                                     restaurant_phone.setText(builder.toString());
+                                    restaurant_phone.setOnClickListener(e -> {
+                                        Intent browserIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + builder.toString()));
+                                        startActivity(browserIntent);
+                                    });
                                 }
                             } else {
                                 restaurant_phone.setText(orderWithDishes.getRestaurant_phone());
                             }
+                        } catch (Exception e) {
+                            Log.e("veeeeOrderFragmentFail", Log.getStackTraceString(e));
 
+                        }
+
+                        try {
                             TextView restaurant_price = getView().findViewById(R.id.price_order);
                             if (orderWithDishes.getOrder_sum() != null) {
-                                restaurant_price.setText(Double.toString(orderWithDishes.getFull_order_sum()) + " BYN");
+                                restaurant_price.setText(String.format("%.2f BYN", orderWithDishes.getFull_order_sum()));
                             } else {
                                 restaurant_price.setText("0 BYN");
                             }
+                        } catch (Exception e) {
+                            Log.e("veeeeOrderFragmentFail", Log.getStackTraceString(e));
 
+                        }
+
+                        try {
                             TextView customer_address = getView().findViewById(R.id.address2Order);
                             customer_address.setText(orderWithDishes.getDelivery_address());
+                            customer_address.setOnClickListener(e -> {
+                                StringBuilder line = new StringBuilder("yandexnavi://build_route_on_map");
+                                CourierLocation location = LocationTools.getToken(mView.getContext());
+                                line.append("?lat_from=")
+                                        .append(location.getLatitude())
+                                        .append("&lon_from=")
+                                        .append(location.getLongitude())
+                                        .append("&lat_to=")
+                                        .append(orderWithDishes.getDelivery_latitude())
+                                        .append("&lon_to=")
+                                        .append(orderWithDishes.getDelivery_longitude());
+                                Uri uri = Uri.parse(line.toString());
+                                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                                intent.setPackage("ru.yandex.yandexnavi");
+                                PackageManager packageManager = getActivity().getPackageManager();
+                                List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
+                                boolean isIntentSafe = activities.size() > 0;
+                                if (isIntentSafe) {
+                                    startActivity(intent);
+                                } else {
 
+                                    intent = new Intent(Intent.ACTION_VIEW);
+                                    intent.setData(Uri.parse("market://details?id=ru.yandex.yandexnavi"));
+                                    startActivity(intent);
+                                }
+                            });
+                        } catch (Exception e) {
+                            Log.e("veeeeOrderFragmentFail", Log.getStackTraceString(e));
+
+                        }
+
+                        try {
                             TextView customer_phone = getView().findViewById(R.id.phone2Order);
                             if (orderWithDishes.getCustomer_phone() != null) {
                                 if (orderWithDishes.getCustomer_phone().length() != 0) {
@@ -233,24 +299,51 @@ public class OrderFragment extends Fragment {
                                     }
                                     builder.append(orderWithDishes.getCustomer_phone());
                                     customer_phone.setText(builder.toString());
+                                    customer_phone.setOnClickListener(e -> {
+                                        Intent browserIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + builder.toString()));
+                                        startActivity(browserIntent);
+                                    });
                                 }
                             } else {
                                 customer_phone.setText(orderWithDishes.getCustomer_phone());
                             }
+                        } catch (Exception e) {
+                            Log.e("veeeeOrderFragmentFail", Log.getStackTraceString(e));
 
+                        }
+
+                        try {
                             if (orderWithDishes.getCustomer_arrival_time() != null) {
                                 Date customer_date = format.parse(orderWithDishes.getCustomer_arrival_time());
                                 TextView customer_time = getView().findViewById(R.id.arrivalTime2Order);
                                 customer_time.setText(createBeautifulDate.format(customer_date));
                             }
+                        } catch (Exception e) {
+                            Log.e("veeeeOrderFragmentFail", Log.getStackTraceString(e));
 
+                        }
+
+                        try {
                             TextView customer_price = getView().findViewById(R.id.to_pay);
-                            if(orderWithDishes.getFull_order_sum() != null) {
-                                customer_price.setText(Double.toString(orderWithDishes.getOrder_sum()) + " BYN");
+                            if (orderWithDishes.getFull_order_sum() != null) {
+                                customer_price.setText(String.format("%.2f BYN", orderWithDishes.getOrder_sum()));
                             } else {
                                 customer_price.setText("0 BYN");
                             }
+                        } catch (Exception e) {
+                            Log.e("veeeeOrderFragmentFail", Log.getStackTraceString(e));
 
+                        }
+
+                        try {
+                            TextView comment = getView().findViewById(R.id.comment);
+                            comment.setText(orderWithDishes.getDelivery_comment());
+                        }catch (Exception e) {
+                            Log.e("veeeeOrderFragmentFail", Log.getStackTraceString(e));
+
+                        }
+
+                        try {
                             View includedView = getView().findViewById(R.id.table_of_dishes);
                             OrderTableAdapter adapter = new OrderTableAdapter(orderWithDishes.getDishes(),
                                     mView.getContext());
@@ -261,9 +354,9 @@ public class OrderFragment extends Fragment {
                                 @Override
                                 public void onGlobalLayout() {
                                     int height = 60;
-                                    for(int i = 0; i < mRecycler.getCount(); i++){
-                                        View view  = mRecycler.getChildAt(i);
-                                        if(view != null) {
+                                    for (int i = 0; i < mRecycler.getCount(); i++) {
+                                        View view = mRecycler.getChildAt(i);
+                                        if (view != null) {
                                             height += view.getHeight();
                                         } else {
                                             height += adapter.getView(i, view, mRecycler).getHeight();
@@ -291,8 +384,6 @@ public class OrderFragment extends Fragment {
 
             @Override
             public void onFailure(Call<OrderWithDishes> call, Throwable t) {
-
-
                 call.cancel();
             }
         });
