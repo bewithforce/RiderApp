@@ -69,12 +69,14 @@ public class LoginActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             Log.e("veeeeTokenError", e.getLocalizedMessage());
                             loginLayout.setError("что-то не так");
+                            passwordInput.setText("");
                             return;
                         }
                         Log.d("veeeeNewToken", token);
                         SessionTools.addToken(getBaseContext(), token);
                     } else {
                         loginLayout.setError("что-то не так");
+                        passwordInput.setText("");
                         try {
                             Log.d("veeeeTokenErrorBody", response.errorBody().string());
                         } catch (Exception e1) {
@@ -89,8 +91,10 @@ public class LoginActivity extends AppCompatActivity {
                             break;
                         case 403:
                             loginLayout.setError("нет допуска");
+                            passwordInput.setText("");
                         case 404:
                             loginLayout.setError("неправильный логин или пароль");
+                            passwordInput.setText("");
                     }
                 }
 

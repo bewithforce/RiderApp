@@ -19,7 +19,14 @@ public class FileTools {
         try {
             FileOutputStream fos = context.openFileOutput("config.txt", Context.MODE_PRIVATE);
             ObjectOutputStream out = new ObjectOutputStream(fos);
-            out.writeObject(response.body());
+            List<Order> list = response.body();
+            try {
+                while (list.contains(null))
+                    list.remove(null);
+            } catch (Exception e){
+                Log.e("writeToFileException", e.getLocalizedMessage());
+            }
+            out.writeObject(list);
             out.close();
             fos.close();
         }
@@ -36,6 +43,8 @@ public class FileTools {
             is.close();
             fis.close();
             Log.e("list size", String.valueOf(list.size()));
+            while(list.contains(null))
+                list.remove(null);
             return list;
         }
         catch (Exception e) {

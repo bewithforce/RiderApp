@@ -103,11 +103,6 @@ public class Order implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
         return id == order.id &&
-                status == order.status &&
-                Double.compare(order.delivery_longitude, delivery_longitude) == 0 &&
-                Double.compare(order.delivery_latitude, delivery_latitude) == 0 &&
-                Double.compare(order.restaurant_longitude, restaurant_longitude) == 0 &&
-                Double.compare(order.restaurant_latitude, restaurant_latitude) == 0 &&
                 Objects.equals(delivery_address, order.delivery_address) &&
                 Objects.equals(restaurant_arrival_time, order.restaurant_arrival_time) &&
                 Objects.equals(customer_arrival_time, order.customer_arrival_time) &&

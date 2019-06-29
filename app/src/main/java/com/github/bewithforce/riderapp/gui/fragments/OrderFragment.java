@@ -79,10 +79,12 @@ public class OrderFragment extends Fragment {
             smallCall.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> litCall, Response<Void> response) {
-                    restaurant.setBackground(getResources().getDrawable(R.drawable.drawable_rectangle_fill_gray));
-                    restaurant.setClickable(false);
-                    customer.setBackground(getResources().getDrawable(R.drawable.drawable_rectangle_fill_yellow));
-                    customer.setClickable(true);
+                    if(response.isSuccessful()) {
+                        restaurant.setBackground(getResources().getDrawable(R.drawable.drawable_rectangle_fill_gray));
+                        restaurant.setClickable(false);
+                        customer.setBackground(getResources().getDrawable(R.drawable.drawable_rectangle_fill_yellow));
+                        customer.setClickable(true);
+                    }
                 }
 
                 @Override
@@ -96,10 +98,12 @@ public class OrderFragment extends Fragment {
             smallCall.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> litCall, Response<Void> response) {
-                    getActivity().getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.base_fragment, new OrdersFragment())
-                            .commit();
+                    if(response.isSuccessful()) {
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.base_fragment, new OrdersFragment())
+                                .commit();
+                    }
                 }
 
                 @Override

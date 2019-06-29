@@ -79,8 +79,14 @@ public class OrdersFragment extends ListFragment implements AdapterView.OnItemCl
             @Override
             public void run() {
                 mTimerHandler.post(() -> {
-                    oldOrders = FileTools.readFromFile(mView.getContext());
-                    if (oldOrders != null) {
+                    List<Order> orders = FileTools.readFromFile(mView.getContext());
+                    if (orders != null) {
+                        if(oldOrders != null){
+                            if(oldOrders.equals(orders)){
+                                return;
+                            }
+                        }
+                        oldOrders = orders;
                         OrdersListAdapter adapter = new OrdersListAdapter(oldOrders, mView.getContext());
                         try {
                             getListView().setAdapter(adapter);
