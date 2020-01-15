@@ -22,7 +22,7 @@ public class APIClient {
 
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://courier.eda-foodtech.by/system/courier/")
+                .baseUrl("http://courier.foodtech.by/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();
